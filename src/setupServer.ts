@@ -6,12 +6,12 @@ import hpp from 'hpp';
 import compression from 'compression';
 import cookieSession from 'cookie-session';
 import HTTP_STATUS from 'http-status-codes';
-import 'express-async-errors';
-import { config } from './config';
 import { Server } from 'socket.io';
 import { createClient } from 'redis';
+import 'express-async-errors';
+import { config } from '@root/config';
 import { createAdapter } from '@socket.io/redis-adapter';
-import { CustomError, IErrorResponse } from './shared/global/helpers/error-handler';
+import { CustomError, IErrorResponse } from '@global/helpers/error-handler';
 
 const log = config.createLogger('server');
 const SERVER_PORT = 5000;
@@ -107,5 +107,7 @@ export class ChattyServer {
     });
   }
 
-  private socketIOConnections(io: Server): void {}
+  private socketIOConnections(io: Server): void {
+    // log.info(io);
+  }
 }
