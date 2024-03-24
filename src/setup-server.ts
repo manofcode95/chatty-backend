@@ -12,6 +12,8 @@ import 'express-async-errors';
 import { config } from '@root/config';
 import { createAdapter } from '@socket.io/redis-adapter';
 import { CustomError, IErrorResponse } from '@global/helpers/error-handler';
+import applicationRoutes from '@root/routes';
+import { currentUserMiddleware } from '@global/middlewares/current-user.middleware';
 
 const log = config.createLogger('server');
 const SERVER_PORT = 5000;
@@ -55,7 +57,10 @@ export class ChattyServer {
     this.app.use(urlencoded({ extended: true, limit: '50mb' }));
   }
 
-  private routesMiddleware(): void {}
+  private routesMiddleware(): void {
+    this.app.use(currentUserMiddleware.getCurrentUser);
+    applicationRoutes(this.app);
+  }
 
   private globalErrorHandler(): void {
     this.app.all('*', (req: Request, res: Response) => {
@@ -74,7 +79,7 @@ export class ChattyServer {
 
   private async startServer(): Promise<void> {
     try {
-      const httpServer: http.Server = new http.Server();
+      const httpServer: http.Server = http.createServer(this.app);
       const socketIO: Server = await this.createSocketIO(httpServer);
       this.startHttpServer(httpServer);
       this.socketIOConnections(socketIO);

@@ -1,11 +1,11 @@
 import express, { Express } from 'express';
-import { ChattyServer } from '@root/setupServer';
-import { connectDatabase } from '@root/setupDatabase';
+import { ChattyServer } from '@root/setup-server';
+import { connectDatabase } from '@root/setup-database';
 import { config } from '@root/config';
 
 class Application {
   async initialize() {
-    config.validateConfig();
+    config.loadConfig();
     await connectDatabase();
     const app: Express = express();
     const server: ChattyServer = new ChattyServer(app);
