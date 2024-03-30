@@ -2,7 +2,7 @@ import JWT from 'jsonwebtoken';
 import { NextFunction, Request, Response } from 'express';
 import { AuthPayload } from '@auth/interfaces/auth.interface';
 import { config } from '@root/config';
-import { NotAuthorizedError } from '@global/helpers/error-handler';
+import { NotAuthorizedError } from '@globals/helpers/error-handler';
 
 class CurrentUserMiddleware {
   public getCurrentUser(req: Request, res: Response, next: NextFunction) {

@@ -1,13 +1,13 @@
 import { Request, Response } from 'express';
 import { UploadApiResponse } from 'cloudinary';
-import { getImageUrl, upload } from '@global/helpers/image-handler';
+import { getImageUrl, upload } from '@root/shared/globals/helpers/image-handler';
 import HTTP_STATUS from 'http-status-codes';
 import { signUpSchema } from '@auth/schemes/signup';
-import { joiValidation } from '@global/decorators/joi-validation.decorator';
+import { joiValidation } from '@root/shared/globals/decorators/joi-validation.decorator';
 import { authService } from '@services/db/auth.service';
-import { BadRequestError } from '@global/helpers/error-handler';
+import { BadRequestError } from '@globals/helpers/error-handler';
 import mongoose from 'mongoose';
-import { generateRandomIntegers } from '@global/helpers/utils';
+import { generateRandomIntegers } from '@root/shared/globals/helpers/utils';
 import { IAuthDocument } from '@auth/interfaces/auth.interface';
 import { IUserDocument } from '@user/interfaces/user.interface';
 import { userCache } from '@services/redis/user.cache';
@@ -15,6 +15,7 @@ import { authQueue } from '@services/queue/auth.queue';
 import { userQueue } from '@services/queue/user.queue';
 import { authUtil } from '@services/utils/auth.util';
 import { userUtil } from '@services/utils/user.util';
+import { mailTransport } from '@services/email/mail.transport';
 
 export class SignupController {
   @joiValidation(signUpSchema)
@@ -24,7 +25,7 @@ export class SignupController {
     const checkIfUserExist = await authService.getUserByEmailOrUsername(username, email);
 
     if (checkIfUserExist) {
-      throw new BadRequestError('Bad credentials');
+      throw new BadRequestError('Invalid credentials');
     }
 
     const authObjectId = new mongoose.Types.ObjectId();
@@ -59,7 +60,7 @@ export class SignupController {
     // Gen token
     const userJwt = authUtil.signToken(authData, userObjectId);
     req.session = { jwt: userJwt };
-    req.session.test = 123;
+    await mailTransport.sendMail('maxie30@ethereal.email', 'Sign up successfully', 'you doing great job');
     res.status(HTTP_STATUS.CREATED).json({ message: 'User created successfully', user: userDataForCache, token: userJwt });
   }
 }

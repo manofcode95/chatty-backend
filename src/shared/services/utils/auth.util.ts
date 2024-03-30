@@ -2,7 +2,7 @@ import mongoose from 'mongoose';
 import JWT from 'jsonwebtoken';
 import { config } from '@root/config';
 import { IAuthDocument, ISignUpData } from '@auth/interfaces/auth.interface';
-import { firstLetterUppercase, lowerCase } from '@global/helpers/utils';
+import { firstLetterUppercase, lowerCase } from '@root/shared/globals/helpers/utils';
 
 export class AuthUtil {
   public signUpData(data: ISignUpData): IAuthDocument {

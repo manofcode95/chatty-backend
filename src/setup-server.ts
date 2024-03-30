@@ -1,4 +1,5 @@
 import { Application, NextFunction, Request, Response, json, urlencoded } from 'express';
+import 'express-async-errors';
 import http from 'http';
 import cors from 'cors';
 import helmet from 'helmet';
@@ -8,12 +9,11 @@ import cookieSession from 'cookie-session';
 import HTTP_STATUS from 'http-status-codes';
 import { Server } from 'socket.io';
 import { createClient } from 'redis';
-import 'express-async-errors';
 import { config } from '@root/config';
 import { createAdapter } from '@socket.io/redis-adapter';
-import { CustomError, IErrorResponse } from '@global/helpers/error-handler';
+import { CustomError, IErrorResponse } from '@globals/helpers/error-handler';
 import applicationRoutes from '@root/routes';
-import { currentUserMiddleware } from '@global/middlewares/current-user.middleware';
+import { currentUserMiddleware } from '@root/shared/globals/middlewares/current-user.middleware';
 
 const log = config.createLogger('server');
 const SERVER_PORT = 5000;
@@ -67,12 +67,13 @@ export class ChattyServer {
       res.status(HTTP_STATUS.NOT_FOUND).json({ message: `${req.originalUrl} not found` });
     });
 
-    this.app.use((error: IErrorResponse, req: Request, res: Response, next: NextFunction) => {
+    this.app.use((error: IErrorResponse, _req: Request, res: Response, next: NextFunction) => {
       log.error(error);
 
       if (error instanceof CustomError) {
-        return res.status(error.statusCode).json(error.serializeError());
+        return res.status(error.statusCode).json(error.serializeErrors());
       }
+
       next();
     });
   }

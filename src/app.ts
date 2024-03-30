@@ -5,7 +5,8 @@ import { config } from '@root/config';
 
 class Application {
   async initialize() {
-    config.loadConfig();
+    config.validateConfig();
+    config.configCloudinary();
     await connectDatabase();
     const app: Express = express();
     const server: ChattyServer = new ChattyServer(app);
