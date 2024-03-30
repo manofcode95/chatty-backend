@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 import { IAuthDocument } from '@auth/interfaces/auth.interface';
-import { firstLetterUppercase } from '@global/helpers/utils';
+import { firstLetterUppercase } from '@root/shared/globals/helpers/utils';
 import { IUserDocument } from '@user/interfaces/user.interface';
 
 export class UserUtil {

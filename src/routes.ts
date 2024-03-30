@@ -1,6 +1,6 @@
 import { authRouter } from '@auth/routers/auth.router';
 import { userRouter } from '@auth/routers/user.router';
-import { currentUserMiddleware } from '@global/middlewares/current-user.middleware';
+import { currentUserMiddleware } from '@root/shared/globals/middlewares/current-user.middleware';
 import { serverAdapter } from '@services/queue/base.queue';
 import { Application } from 'express';
 

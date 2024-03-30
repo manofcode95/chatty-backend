@@ -1,5 +1,5 @@
-import { ServerError } from '@global/helpers/error-handler';
-import { parseJson } from '@global/helpers/utils';
+import { ServerError } from '@globals/helpers/error-handler';
+import { parseJson } from '@root/shared/globals/helpers/utils';
 import { BaseCache } from '@services/redis/base.cache';
 import { IUserDocument } from '@user/interfaces/user.interface';
 
@@ -9,6 +9,7 @@ export class UserCache extends BaseCache {
   }
 
   public async saveUserToCache(key: string, userUId: string, createdUser: IUserDocument): Promise<void> {
+    console.log(123456);
     const createdAt = new Date();
     const {
       _id,
