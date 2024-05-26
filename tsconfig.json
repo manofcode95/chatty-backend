@@ -29,6 +29,8 @@
     "paths": {
       "@auth/*": ["src/features/auth/*"],
       "@user/*": ["src/features/user/*"],
+      "@post/*": ["src/features/post/*"],
+      "@mocks/*": ["src/mocks/*"],
       "@notification/*": ["src/features/notification/*"],
       "@globals/*": ["src/shared/globals/*"],
       "@services/*": ["src/shared/services/*"],

@@ -9,7 +9,7 @@ export class AuthWorker {
   async addAuthUserToDb(job: Job, done: DoneCallback) {
     try {
       const { value } = job.data;
-      authService.createAuthUser(value);
+      await authService.createAuthUser(value);
       job.progress(100);
       done(null, job.data);
     } catch (err) {

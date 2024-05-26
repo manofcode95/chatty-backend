@@ -14,6 +14,7 @@ import { createAdapter } from '@socket.io/redis-adapter';
 import { CustomError, IErrorResponse } from '@globals/helpers/error-handler';
 import applicationRoutes from '@root/routes';
 import { currentUserMiddleware } from '@root/shared/globals/middlewares/current-user.middleware';
+import { SocketIOPostHandler } from '@sockets/post.socket';
 
 const log = config.createLogger('server');
 const SERVER_PORT = 5000;
@@ -114,6 +115,7 @@ export class ChattyServer {
   }
 
   private socketIOConnections(io: Server): void {
-    // log.info(io);
+    const socketIOPostHandler = new SocketIOPostHandler(io);
+    socketIOPostHandler.listen();
   }
 }

@@ -5,6 +5,7 @@ import { authMock, authMockRequest, authMockResponse } from '@root/mocks/auth.mo
 import { authService } from '@services/db/auth.service';
 import { userCache } from '@services/redis/user.cache';
 import * as imageHandler from '@globals/helpers/image-handler';
+import { mailTransport } from '@services/email/mail.transport';
 
 // jest.mock('@globals/helpers/image-handler', () => ({
 //   upload: jest.fn(() => {})
@@ -15,6 +16,7 @@ jest.mock('@services/queue/base.queue');
 jest.mock('@services/queue/auth.queue');
 jest.mock('@services/queue/user.queue');
 jest.mock('@services/redis/user.cache');
+jest.mock('@services/email/mail.transport');
 
 describe('SignUp', () => {
   beforeEach(() => {
@@ -25,6 +27,7 @@ describe('SignUp', () => {
     jest.clearAllMocks();
     jest.clearAllTimers();
   });
+
   it('should throw an error if username is not available', () => {
     const req: Request = authMockRequest(
       {},
@@ -205,6 +208,7 @@ describe('SignUp', () => {
 
     jest.spyOn(authService, 'getUserByEmailOrUsername').mockResolvedValue(null);
     const userSpy = jest.spyOn(userCache, 'saveUserToCache');
+    const mailSpy = jest.spyOn(mailTransport, 'sendMail');
 
     // note: Mock imported method
     jest.spyOn(imageHandler, 'upload').mockResolvedValue({ public_id: 'mockPublicId', version: 1234 });
@@ -216,5 +220,6 @@ describe('SignUp', () => {
       user: userSpy.mock.calls[0][2], // note:  first call, third argument
       token: req.session?.jwt
     });
+    expect(mailSpy).toHaveBeenCalled();
   });
 });

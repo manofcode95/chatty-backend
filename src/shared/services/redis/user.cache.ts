@@ -9,7 +9,6 @@ export class UserCache extends BaseCache {
   }
 
   public async saveUserToCache(key: string, userUId: string, createdUser: IUserDocument): Promise<void> {
-    console.log(123456);
     const createdAt = new Date();
     const {
       _id,

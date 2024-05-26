@@ -9,7 +9,7 @@ export class UserWorker {
   async addUserToDb(job: Job, done: DoneCallback) {
     try {
       const { value } = job.data;
-      userService.createUser(value);
+      await userService.createUser(value);
       job.progress(100);
       done(null, job.data);
     } catch (err) {
