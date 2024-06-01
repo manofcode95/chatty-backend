@@ -1,9 +1,10 @@
 import { ServerError } from '@globals/helpers/error-handler';
 import { parseJson } from '@globals/helpers/utils';
-import { IPostDocument, IReactions, ISavePostToCache } from '@post/interfaces/post.interface';
+import { IPostDocument, ISavePostToCache } from '@post/interfaces/post.interface';
+import { IReactions } from '@root/features/reaction/interfaces/reaction.interface';
 import { BaseCache } from '@services/redis/base.cache';
 
-export class PostCache extends BaseCache {
+class PostCache extends BaseCache {
   constructor() {
     super('postCache');
   }
@@ -282,6 +283,20 @@ export class PostCache extends BaseCache {
       postReply.createdAt = new Date(parseJson(`${postReply.createdAt}`)) as Date;
 
       return postReply;
+    } catch (error) {
+      this.log.error(error);
+      throw new ServerError('Server error. Try again.');
+    }
+  }
+
+  public async getPostReaction(postId: string): Promise<IReactions> {
+    try {
+      if (!this.client.isOpen) {
+        await this.client.connect();
+      }
+
+      const postReactionsRaw = await this.client.HGET(`posts:${postId}`, 'reactions');
+      return parseJson(postReactionsRaw);
     } catch (error) {
       this.log.error(error);
       throw new ServerError('Server error. Try again.');

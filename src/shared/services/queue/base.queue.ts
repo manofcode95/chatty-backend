@@ -7,8 +7,9 @@ import { config } from '@root/config';
 import { IAuthJob } from '@auth/interfaces/auth.interface';
 import { IEmailJob, IUserJob } from '@user/interfaces/user.interface';
 import { IPostJobData } from '@post/interfaces/post.interface';
+import { IReactionJob } from '@root/features/reaction/interfaces/reaction.interface';
 
-type IBaseJobData = IAuthJob | IUserJob | IEmailJob | IPostJobData;
+export type IBaseJobData = IAuthJob | IUserJob | IEmailJob | IPostJobData | IReactionJob;
 
 let bullAdapters: BullAdapter[] = [];
 
@@ -56,7 +57,7 @@ export abstract class BaseQueue {
     this.queue.add(name, data, { attempts: 3, backoff: { type: 'fixed', delay: 5000 } });
   }
 
-  protected processJob(name: string, concurrency: number, callback: Queue.ProcessCallbackFunction<void>): void {
+  protected processJob(name: string, concurrency: number, callback: Queue.ProcessCallbackFunction<IBaseJobData>): void {
     this.queue.process(name, concurrency, callback);
   }
 }

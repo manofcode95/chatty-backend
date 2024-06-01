@@ -14,7 +14,7 @@ Accept: application/json
 withCredentials: true
 
 {
-  "post": "new post 7",
+  "post": "new post 14",
   "bgColor": "#fff",
   "privacy": "Public",
   "gifUrl": "",
