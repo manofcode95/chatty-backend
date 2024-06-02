@@ -11,17 +11,19 @@ class ReactionRouter {
   }
 
   public routes(): Router {
-    this.router.get('/post/reactions/:postId', (req: Request, res: Response) => getReactionController.getReactions(req, res));
+    this.router.get('/reactions/:postId', (req: Request, res: Response) => getReactionController.getReactions(req, res));
 
-    this.router.get('/post/reaction/:postId/:username', (req: Request, res: Response) =>
+    this.router.get('/reaction/:postId/:username', (req: Request, res: Response) =>
       getReactionController.getSingleReactionByUsername(req, res)
     );
 
-    this.router.get('/reactions/username/:username', (req: Request, res: Response) => getReactionController.getReactionsByUsername(req, res));
+    this.router.get('/reactions/username/:username', (req: Request, res: Response) =>
+      getReactionController.getReactionsByUsername(req, res)
+    );
 
-    this.router.post('/post/reactions', (req: Request, res: Response) => addReactionController.addReaction(req, res));
+    this.router.post('/reactions', (req: Request, res: Response) => addReactionController.addReaction(req, res));
 
-    this.router.delete('/post/reaction/:postId/:type', (req: Request, res: Response) => removeReactionController.removeReaction(req, res));
+    this.router.delete('/reaction/:postId/:type', (req: Request, res: Response) => removeReactionController.removeReaction(req, res));
 
     return this.router;
   }

@@ -31,6 +31,7 @@
       "@user/*": ["src/features/user/*"],
       "@post/*": ["src/features/post/*"],
       "@reaction/*": ["src/features/reaction/*"],
+      "@comment/*": ["src/features/comment/*"],
       "@mocks/*": ["src/mocks/*"],
       "@notification/*": ["src/features/notification/*"],
       "@globals/*": ["src/shared/globals/*"],

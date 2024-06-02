@@ -1,5 +1,6 @@
 import { authRouter } from '@auth/routers/auth.router';
 import { userRouter } from '@auth/routers/user.router';
+import { commentRouter } from '@comment/routes/comment.router';
 import { postRouter } from '@post/routers/post.router';
 import { reactionRouter } from '@root/features/reaction/routes/reaction.router';
 import { currentUserMiddleware } from '@root/shared/globals/middlewares/current-user.middleware';
@@ -15,6 +16,7 @@ export default (app: Application) => {
     app.use(BASE_PATH, currentUserMiddleware.checkAuthentication, userRouter.routes());
     app.use(BASE_PATH, currentUserMiddleware.checkAuthentication, postRouter.routes());
     app.use(BASE_PATH, currentUserMiddleware.checkAuthentication, reactionRouter.routes());
+    app.use(BASE_PATH, currentUserMiddleware.checkAuthentication, commentRouter.routes());
   };
 
   routes();
