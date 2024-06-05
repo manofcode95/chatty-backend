@@ -17,6 +17,22 @@ export class UserWorker {
       done(err as Error);
     }
   }
+
+  async addBlockedUserToDb(job: Job, done: DoneCallback): Promise<void> {
+    try {
+      const { userId, blockedId, type } = job.data;
+      if (type === 'block') {
+        await userService.blockUser(userId, blockedId);
+      } else {
+        await userService.unblockUser(userId, blockedId);
+      }
+      job.progress(100);
+      done(null, job.data);
+    } catch (error) {
+      log.error(error);
+      done(error as Error);
+    }
+  }
 }
 
 export const userWorker = new UserWorker();

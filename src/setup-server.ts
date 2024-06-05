@@ -15,6 +15,8 @@ import { CustomError, IErrorResponse } from '@globals/helpers/error-handler';
 import applicationRoutes from '@root/routes';
 import { currentUserMiddleware } from '@root/shared/globals/middlewares/current-user.middleware';
 import { SocketIOPostHandler } from '@sockets/post.socket';
+import { SocketIOFollowerHandler } from '@sockets/follower.socket';
+import { SocketIOUserHandler } from '@sockets/user.socket';
 
 const log = config.createLogger('server');
 const SERVER_PORT = 5000;
@@ -116,6 +118,11 @@ export class ChattyServer {
 
   private socketIOConnections(io: Server): void {
     const socketIOPostHandler = new SocketIOPostHandler(io);
+    const socketIOFollowerHandler = new SocketIOFollowerHandler(io);
+    const socketIOUserHandler = new SocketIOUserHandler(io);
+
     socketIOPostHandler.listen();
+    socketIOFollowerHandler.listen();
+    socketIOUserHandler.listen();
   }
 }

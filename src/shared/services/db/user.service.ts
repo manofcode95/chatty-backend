@@ -29,6 +29,56 @@ class UserService {
     return users[0];
   }
 
+  public async blockUser(userId: string, blockedId: string): Promise<void> {
+    await UserModel.bulkWrite([
+      {
+        updateOne: {
+          filter: { _id: userId, blocked: { $ne: new mongoose.Types.ObjectId(blockedId) } },
+          update: {
+            $push: {
+              blocked: new mongoose.Types.ObjectId(blockedId)
+            }
+          }
+        }
+      },
+      {
+        updateOne: {
+          filter: { _id: blockedId, blockedBy: { $ne: new mongoose.Types.ObjectId(userId) } },
+          update: {
+            $push: {
+              blockedBy: new mongoose.Types.ObjectId(userId)
+            }
+          }
+        }
+      }
+    ]);
+  }
+
+  public async unblockUser(userId: string, blockedId: string): Promise<void> {
+    await UserModel.bulkWrite([
+      {
+        updateOne: {
+          filter: { _id: userId },
+          update: {
+            $pull: {
+              blocked: new mongoose.Types.ObjectId(blockedId)
+            }
+          }
+        }
+      },
+      {
+        updateOne: {
+          filter: { _id: blockedId },
+          update: {
+            $pull: {
+              blockedBy: new mongoose.Types.ObjectId(userId)
+            }
+          }
+        }
+      }
+    ]);
+  }
+
   private aggregateProject() {
     return {
       _id: 1,

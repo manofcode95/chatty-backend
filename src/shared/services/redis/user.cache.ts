@@ -67,7 +67,7 @@ export class UserCache extends BaseCache {
     }
   }
 
-  public async getUserFromCache(userId: string): Promise<IUserDocument | null> {
+  public async getUserFromCache(userId: string): Promise<IUserDocument> {
     try {
       if (!this.client.isOpen) {
         await this.client.connect();
@@ -86,6 +86,40 @@ export class UserCache extends BaseCache {
       return cachedUser;
     } catch (err) {
       this.log.error(err);
+      throw new ServerError('Server error. Try again.');
+    }
+  }
+
+  public async handleBlockUserInCache(userId: string, blockedId: string, type: 'block' | 'unblock'): Promise<void> {
+    try {
+      if (!this.client.isOpen) {
+        await this.client.connect();
+      }
+
+      const [blockedRaw, blockedByRaw] = await Promise.all([
+        this.client.HGET(`users:${userId}`, 'blocked'),
+        this.client.HGET(`users:${blockedId}`, 'blockedBy')
+      ]);
+
+      let blocked = (parseJson(blockedRaw) || []) as string[];
+      let blockedBy = (parseJson(blockedByRaw) || []) as string[];
+
+      if (type === 'block') {
+        blocked.push(blockedId);
+        blockedBy.push(userId);
+      } else {
+        blocked = blocked.filter((id: string) => id !== blockedId);
+        blockedBy = blockedBy.filter((id: string) => id !== userId);
+      }
+
+      const multi: ReturnType<typeof this.client.multi> = this.client.multi();
+
+      multi.HSET(`users:${userId}`, 'blocked', JSON.stringify(blocked));
+      multi.HSET(`users:${blockedId}`, 'blockedBy', JSON.stringify(blockedBy));
+
+      await multi.exec();
+    } catch (error) {
+      this.log.error(error);
       throw new ServerError('Server error. Try again.');
     }
   }

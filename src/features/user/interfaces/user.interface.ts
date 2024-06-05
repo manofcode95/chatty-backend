@@ -61,7 +61,7 @@ export interface ISearchUser {
   avatarColor: string;
 }
 
-export interface ISocketData {
+export interface IUserSocketData {
   blockedUser: string;
   blockedBy: string;
 }
@@ -91,4 +91,10 @@ export interface IEmailJob {
 export interface IAllUsers {
   users: IUserDocument[];
   totalUsers: number;
+}
+
+export interface IBlockedUserJobData {
+  userId?: string;
+  blockedId?: string;
+  type?: 'block' | 'unblock';
 }
