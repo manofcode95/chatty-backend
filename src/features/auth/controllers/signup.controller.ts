@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 import { UploadApiResponse } from 'cloudinary';
 import { getImageUrl, upload } from '@root/shared/globals/helpers/image-handler';
 import HTTP_STATUS from 'http-status-codes';
-import { signUpSchema } from '@auth/schemes/signup';
+import { signUpSchema } from '@auth/schemes/signup.scheme';
 import { joiValidation } from '@root/shared/globals/decorators/joi-validation.decorator';
 import { authService } from '@services/db/auth.service';
 import { BadRequestError } from '@globals/helpers/error-handler';

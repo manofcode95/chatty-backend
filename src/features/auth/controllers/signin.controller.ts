@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import HTTP_STATUS from 'http-status-codes';
-import { signInSchema } from '@auth/schemes/signin';
+import { signInSchema } from '@auth/schemes/signin.scheme';
 import { joiValidation } from '@root/shared/globals/decorators/joi-validation.decorator';
 import { authService } from '@services/db/auth.service';
 import { BadRequestError } from '@globals/helpers/error-handler';

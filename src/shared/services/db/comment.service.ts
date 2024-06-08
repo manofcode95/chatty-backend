@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { ICommentDocument, ICommentJob, ICommentNameList, IQueryComment } from '@comment/interfaces/comment.interface';
-import { CommentsModel } from '@comment/models/comment.schema';
+import { CommentsModel } from '@comment/models/comment.model';
 import { IPostDocument } from '@post/interfaces/post.interface';
-import { PostModel } from '@post/models/post.schema';
+import { PostModel } from '@post/models/post.model';
 import mongoose, { Query } from 'mongoose';
 import { UserCache, userCache } from '@services/redis/user.cache';
 import { IUserDocument } from '@user/interfaces/user.interface';

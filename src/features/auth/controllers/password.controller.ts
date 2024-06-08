@@ -4,7 +4,7 @@ import moment from 'moment';
 import publicIP from 'ip';
 import HTTP_STATUS from 'http-status-codes';
 import { IAuthDocument } from '@auth/interfaces/auth.interface';
-import { emailSchema, passwordSchema } from '@auth/schemes/password';
+import { emailSchema, passwordSchema } from '@auth/schemes/password.scheme';
 import crypto from 'crypto';
 import { IResetPasswordParams } from '@user/interfaces/user.interface';
 import { BadRequestError } from '@globals/helpers/error-handler';

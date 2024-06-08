@@ -1,6 +1,6 @@
 import { joiValidation } from '@globals/decorators/joi-validation.decorator';
 import { IPostDocument } from '@post/interfaces/post.interface';
-import { postSchema, postWithImageSchema } from '@post/schemes/post.schemes';
+import { postSchema, postWithImageSchema } from '@post/schemes/post.scheme';
 import { Request, Response } from 'express';
 import HTTP_STATUS from 'http-status-codes';
 import { postCache } from '@services/redis/post.cache';

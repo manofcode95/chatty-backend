@@ -1,5 +1,5 @@
 import { IAuthDocument } from '@auth/interfaces/auth.interface';
-import { AuthModel } from '@auth/models/auth.schema';
+import { AuthModel } from '@auth/models/auth.model';
 import { firstLetterUppercase, lowerCase } from '@root/shared/globals/helpers/utils';
 
 class AuthService {

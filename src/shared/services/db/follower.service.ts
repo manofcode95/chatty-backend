@@ -1,9 +1,8 @@
-import { FollowerModel } from '@follower/models/follower.schema';
-import { UserModel } from '@user/models/user.schema';
+import { FollowerModel } from '@follower/models/follower.model';
+import { UserModel } from '@user/models/user.model';
 import mongoose, { Query } from 'mongoose';
 import { IFollowerData, IFollowerDocument } from '@follower/interfaces/follower.interface';
 import { IQueryDeleted, IQueryComplete } from '@post/interfaces/post.interface';
-import { map } from 'lodash';
 
 class FollowerService {
   public async addFollower(

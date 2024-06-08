@@ -1,7 +1,7 @@
 import { IGetPostsQuery, IPostDocument, IQueryComplete, IQueryDeleted } from '@post/interfaces/post.interface';
-import { PostModel } from '@post/models/post.schema';
+import { PostModel } from '@post/models/post.model';
 import { IUserDocument } from '@user/interfaces/user.interface';
-import { UserModel } from '@user/models/user.schema';
+import { UserModel } from '@user/models/user.model';
 import { Query, UpdateQuery } from 'mongoose';
 
 export class PostService {

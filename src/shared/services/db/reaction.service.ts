@@ -1,6 +1,6 @@
-import { PostModel } from '@post/models/post.schema';
+import { PostModel } from '@post/models/post.model';
 import { IQueryReaction, IReactionDocument, IReactionJob } from '@root/features/reaction/interfaces/reaction.interface';
-import { ReactionModel } from '@reaction/models/reaction.schema';
+import { ReactionModel } from '@reaction/models/reaction.model';
 import { userCache } from '@services/redis/user.cache';
 import { omit } from 'lodash';
 import mongoose from 'mongoose';

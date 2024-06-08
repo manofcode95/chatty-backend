@@ -1,6 +1,6 @@
 import { joiValidation } from '@globals/decorators/joi-validation.decorator';
 import { IReactionDocument, IReactionJob } from '@reaction/interfaces/reaction.interface';
-import { addReactionSchema } from '@reaction/schemes/reaction.schemes';
+import { addReactionSchema } from '@reaction/schemes/reaction.scheme';
 import { reactionCache } from '@services/redis/reaction.cache';
 import { Request, Response } from 'express';
 import * as mongoose from 'mongoose';
