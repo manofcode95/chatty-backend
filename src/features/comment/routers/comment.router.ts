@@ -10,7 +10,7 @@ class CommentRouter {
   }
 
   public routes(): Router {
-    this.router.post('/comment', (req: Request, res: Response) => addCommentController.addComment(req, res));
+    this.router.post('/comment/:postId', (req: Request, res: Response) => addCommentController.addComment(req, res));
     this.router.get('/comments/:postId', (req: Request, res: Response) => getCommentController.getComments(req, res));
     this.router.get('/comments-names/:postId', (req: Request, res: Response) => getCommentController.getCommentsNamesByPost(req, res));
     this.router.get('/comment/:postId/:commentId', (req: Request, res: Response) => getCommentController.getSingleCommentById(req, res));

@@ -24,7 +24,7 @@ describe('AddUser', () => {
       const req: Request = followersMockRequest({}, authUserPayload, { followerId: '6064861bc25eaa5a5d2f9bf4' }) as Request;
       const res: Response = followersMockResponse();
       jest.spyOn(FollowerCache.prototype, 'updateBlockedUserPropInCache');
-      jest.spyOn(blockedUserQueue, 'addBlockedUserJob');
+      jest.spyOn(blockedUserQueue, 'addBlockedUserInDbJob');
 
       await AddUser.prototype.block(req, res);
       expect(FollowerCache.prototype.updateBlockedUserPropInCache).toHaveBeenCalledWith(
@@ -39,7 +39,7 @@ describe('AddUser', () => {
         '6064861bc25eaa5a5d2f9bf4',
         'block'
       );
-      expect(blockedUserQueue.addBlockedUserJob).toHaveBeenCalledWith('addBlockedUserToDB', {
+      expect(blockedUserQueue.addBlockedUserInDbJob).toHaveBeenCalledWith('addBlockedUserToDB', {
         keyOne: `${req.currentUser?.userId}`,
         keyTwo: '6064861bc25eaa5a5d2f9bf4',
         type: 'block'
@@ -56,7 +56,7 @@ describe('AddUser', () => {
       const req: Request = followersMockRequest({}, authUserPayload, { followerId: '6064861bc25eaa5a5d2f9bf4' }) as Request;
       const res: Response = followersMockResponse();
       jest.spyOn(FollowerCache.prototype, 'updateBlockedUserPropInCache');
-      jest.spyOn(blockedUserQueue, 'addBlockedUserJob');
+      jest.spyOn(blockedUserQueue, 'addBlockedUserInDbJob');
 
       await AddUser.prototype.unblock(req, res);
       expect(FollowerCache.prototype.updateBlockedUserPropInCache).toHaveBeenCalledWith(
@@ -71,7 +71,7 @@ describe('AddUser', () => {
         '6064861bc25eaa5a5d2f9bf4',
         'unblock'
       );
-      expect(blockedUserQueue.addBlockedUserJob).toHaveBeenCalledWith('removeBlockedUserFromDB', {
+      expect(blockedUserQueue.addBlockedUserInDbJob).toHaveBeenCalledWith('removeBlockedUserFromDB', {
         keyOne: `${req.currentUser?.userId}`,
         keyTwo: '6064861bc25eaa5a5d2f9bf4',
         type: 'unblock'

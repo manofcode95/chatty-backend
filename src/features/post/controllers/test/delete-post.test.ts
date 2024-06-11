@@ -5,7 +5,7 @@ import { socketIOPostObject } from '@sockets/post.socket';
 import { newPost, postMockRequest, postMockResponse } from '@root/mocks/post.mock';
 import { postQueue } from '@services/queue/post.queue';
 import { deletePostController } from '@post/controllers/delete-post.controller';
-import { PostCache } from '@services/redis/post.cache';
+import { postCache } from '@services/redis/post.cache';
 
 jest.useFakeTimers();
 jest.mock('@services/queue/base.queue');
@@ -25,13 +25,16 @@ describe('Delete', () => {
   it('should send correct json response', async () => {
     const req: Request = postMockRequest(newPost, authUserPayload, { postId: '12345' }) as Request;
     const res: Response = postMockResponse();
-    jest.spyOn(PostCache.prototype, 'deletePostFromCache');
-    jest.spyOn(postQueue, 'addPostJob');
+    jest.spyOn(postCache, 'deletePostFromCache');
+    jest.spyOn(postQueue, 'deletePostFromDb');
 
     await deletePostController.deletePost(req, res);
     expect(socketIOPostObject.emit).toHaveBeenCalledWith('delete post', req.params.postId);
-    expect(PostCache.prototype.deletePostFromCache).toHaveBeenCalledWith(req.params.postId, `${req.currentUser?.userId}`);
-    expect(postQueue.addPostJob).toHaveBeenCalledWith('deletePostFromDb', { keyOne: req.params.postId, keyTwo: req.currentUser?.userId });
+    expect(postCache.deletePostFromCache).toHaveBeenCalledWith(req.params.postId, `${req.currentUser?.userId}`);
+    expect(postQueue.deletePostFromDb).toHaveBeenCalledWith('deletePostFromDb', {
+      keyOne: req.params.postId,
+      keyTwo: req.currentUser?.userId
+    });
     expect(res.status).toHaveBeenCalledWith(200);
     expect(res.json).toHaveBeenCalledWith({
       message: 'Post deleted successfully'

@@ -15,7 +15,6 @@ import { authQueue } from '@services/queue/auth.queue';
 import { userQueue } from '@services/queue/user.queue';
 import { authUtil } from '@services/utils/auth.util';
 import { userUtil } from '@services/utils/user.util';
-import { mailTransport } from '@services/email/mail.transport';
 
 export class SignupController {
   @joiValidation(signUpSchema)
@@ -54,13 +53,13 @@ export class SignupController {
     await userCache.saveUserToCache(`${userObjectId}`, uId, userDataForCache);
 
     // Add to database
-    authQueue.addAuthUserJob('addAuthUserToDb', { value: authData });
-    userQueue.addUserJob('addUserToDb', { value: userDataForCache });
+    authQueue.saveAuthToDbJob({ auth: authData });
+    userQueue.saveUserToDbJob({ user: userDataForCache });
 
     // Gen token
     const userJwt = authUtil.signToken(authData, userObjectId);
     req.session = { jwt: userJwt };
-    await mailTransport.sendMail('maxie30@ethereal.email', 'Sign up successfully', 'you doing great job');
+
     res.status(HTTP_STATUS.CREATED).json({ message: 'User created successfully', user: userDataForCache, token: userJwt });
   }
 }

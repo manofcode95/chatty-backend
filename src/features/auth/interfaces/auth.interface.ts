@@ -1,4 +1,3 @@
-import { IUserDocument } from '@user/interfaces/user.interface';
 import { Document, Types } from 'mongoose';
 
 declare global {
@@ -41,6 +40,15 @@ export interface ISignUpData {
   avatarColor: string;
 }
 
-export interface IAuthJob {
-  value?: string | IAuthDocument | IUserDocument;
+export interface ISaveAuthJob {
+  auth: IAuthDocument;
+}
+
+export interface ISendForgotPasswordEmailJob {
+  auth: IAuthDocument;
+  resetLink: string;
+}
+
+export interface ISendFConfirmPasswordEmailJob {
+  auth: IAuthDocument;
 }

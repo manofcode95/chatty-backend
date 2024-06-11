@@ -1,40 +1,41 @@
 import { PostModel } from '@post/models/post.model';
-import { IQueryReaction, IReactionDocument, IReactionJob } from '@root/features/reaction/interfaces/reaction.interface';
+import {
+  IAddReactionJob,
+  IQueryReaction,
+  IReactionDocument,
+  IRemoveReactionJob
+} from '@root/features/reaction/interfaces/reaction.interface';
 import { ReactionModel } from '@reaction/models/reaction.model';
-import { userCache } from '@services/redis/user.cache';
 import { omit } from 'lodash';
 import mongoose from 'mongoose';
 import { firstLetterUppercase } from '@globals/helpers/utils';
+import { notificationQueue } from '@services/queue/notification.queue';
+import { IPostDocument } from '@post/interfaces/post.interface';
 
 class ReactionService {
-  public async saveReaction(reactionData: IReactionJob): Promise<void> {
+  public async saveReaction(reactionData: IAddReactionJob): Promise<void> {
     const { postId, previousReaction, username, reactionObject, type, userFrom, userTo } = reactionData;
 
-    try {
-      await Promise.all([
-        userCache.getUserFromCache(`${userTo}`),
-        ReactionModel.replaceOne({ postId, username, type: previousReaction }, omit(reactionObject, ['_id']), { upsert: true }),
-        PostModel.findOneAndUpdate(
-          {
-            _id: postId
-          },
-          {
-            $inc: {
-              [`reactions.${previousReaction}`]: -1,
-              [`reactions.${type}`]: 1
-            }
-          },
-          { new: true }
-        )
-      ]);
-    } catch (err) {
-      console.log(err);
-    }
+    const [reaction, post]: [IReactionDocument, IPostDocument] = (await Promise.all([
+      ReactionModel.replaceOne({ postId, username, type: previousReaction }, omit(reactionObject, ['_id']), { upsert: true }),
+      PostModel.findOneAndUpdate(
+        {
+          _id: postId
+        },
+        {
+          $inc: {
+            [`reactions.${previousReaction}`]: -1,
+            [`reactions.${type}`]: 1
+          }
+        },
+        { new: true }
+      )
+    ])) as unknown as [IReactionDocument, IPostDocument];
 
-    // send notification
+    notificationQueue.sendReactionNotification({ reaction, post, userFromId: userFrom, userToId: userTo });
   }
 
-  public async removeReaction(reactionData: IReactionJob): Promise<void> {
+  public async removeReaction(reactionData: IRemoveReactionJob): Promise<void> {
     const { postId, previousReaction, username } = reactionData;
 
     await Promise.all([

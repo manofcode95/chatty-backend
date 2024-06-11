@@ -1,3 +1,4 @@
+import { IAddReactionJob, IRemoveReactionJob } from '@reaction/interfaces/reaction.interface';
 import { config } from '@root/config';
 import { reactionService } from '@services/db/reaction.service';
 import { DoneCallback, Job } from 'bull';
@@ -6,7 +7,7 @@ import Logger from 'bunyan';
 const log: Logger = config.createLogger('reactionWorker');
 
 export class ReactionWorker {
-  async addReactionToDb(job: Job, done: DoneCallback) {
+  async addReactionToDb(job: Job<IAddReactionJob>, done: DoneCallback) {
     try {
       const { data } = job;
       await reactionService.saveReaction(data);
@@ -18,7 +19,7 @@ export class ReactionWorker {
     }
   }
 
-  async removeReactionFromDb(job: Job, done: DoneCallback) {
+  async removeReactionFromDb(job: Job<IRemoveReactionJob>, done: DoneCallback) {
     try {
       const { data } = job;
       await reactionService.removeReaction(data);

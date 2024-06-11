@@ -49,9 +49,9 @@ describe('Password', () => {
       const req: Request = authMockRequest({}, { email: CORRECT_EMAIL }) as Request;
       const res: Response = authMockResponse();
       jest.spyOn(authService, 'getAuthUserByEmail').mockResolvedValue(authMock);
-      jest.spyOn(emailQueue, 'addEmailJob');
+      jest.spyOn(emailQueue, 'sendForgotPasswordEmail');
       await passwordController.forgotPassword(req, res);
-      expect(emailQueue.addEmailJob).toHaveBeenCalled();
+      expect(emailQueue.sendForgotPasswordEmail).toHaveBeenCalled();
       expect(res.status).toHaveBeenCalledWith(200);
       expect(res.json).toHaveBeenCalledWith({
         message: 'Password reset email sent.'
@@ -96,9 +96,9 @@ describe('Password', () => {
       }) as Request;
       const res: Response = authMockResponse();
       jest.spyOn(authService, 'getAuthUserByPasswordToken').mockResolvedValue(authMock);
-      jest.spyOn(emailQueue, 'addEmailJob');
+      jest.spyOn(emailQueue, 'sendResetPasswordEmail');
       await passwordController.updatePassword(req, res);
-      expect(emailQueue.addEmailJob).toHaveBeenCalled();
+      expect(emailQueue.sendResetPasswordEmail).toHaveBeenCalled();
       expect(res.status).toHaveBeenCalledWith(200);
       expect(res.json).toHaveBeenCalledWith({
         message: 'Password successfully updated.'

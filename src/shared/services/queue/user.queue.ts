@@ -1,20 +1,21 @@
+import { QUEUES } from '@root/shared/constants/keys';
 import { BaseQueue } from '@services/queue/base.queue';
-import { IBlockedUserJobData, IUserJob } from '@user/interfaces/user.interface';
+import { IBlockedUserJob, IUserJob } from '@user/interfaces/user.interface';
 import { userWorker } from '@workers/user.worker';
 
 export class UserQueue extends BaseQueue {
   constructor() {
     super('user');
-    this.processJob('addUserToDb', 5, userWorker.addUserToDb);
-    this.processJob('addBlockedUserToDb', 5, userWorker.addBlockedUserToDb);
+    this.processJob<IUserJob>(QUEUES.ADD_USER_TO_DB, 5, userWorker.addUserToDb);
+    this.processJob<IBlockedUserJob>(QUEUES.UPDATE_BLOCKED_USER_IN_DB, 5, userWorker.addBlockedUserToDb);
   }
 
-  public addUserJob(name: string, data: IUserJob) {
-    this.addJob(name, data);
+  saveUserToDbJob(data: IUserJob) {
+    this.addJob<IUserJob>(QUEUES.ADD_USER_TO_DB, data);
   }
 
-  public addBlockUserJob(name: string, data: IBlockedUserJobData) {
-    this.addJob(name, data);
+  addBlockedUserInDbJob(data: IBlockedUserJob) {
+    this.addJob<IBlockedUserJob>(QUEUES.UPDATE_BLOCKED_USER_IN_DB, data);
   }
 }
 

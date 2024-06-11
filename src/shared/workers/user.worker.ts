@@ -1,15 +1,16 @@
 import { config } from '@root/config';
 import { userService } from '@services/db/user.service';
+import { IBlockedUserJob, IUserJob } from '@user/interfaces/user.interface';
 import { DoneCallback, Job } from 'bull';
 import Logger from 'bunyan';
 
 const log: Logger = config.createLogger('userWorker');
 
 export class UserWorker {
-  async addUserToDb(job: Job, done: DoneCallback) {
+  async addUserToDb(job: Job<IUserJob>, done: DoneCallback) {
     try {
-      const { value } = job.data;
-      await userService.createUser(value);
+      const { user } = job.data;
+      await userService.createUser(user);
       job.progress(100);
       done(null, job.data);
     } catch (err) {
@@ -18,7 +19,7 @@ export class UserWorker {
     }
   }
 
-  async addBlockedUserToDb(job: Job, done: DoneCallback): Promise<void> {
+  async addBlockedUserToDb(job: Job<IBlockedUserJob>, done: DoneCallback): Promise<void> {
     try {
       const { userId, blockedId, type } = job.data;
       if (type === 'block') {

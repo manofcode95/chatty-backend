@@ -25,9 +25,9 @@ export class CreatePostController {
 
     socketIOPostObject.emit('add post', createdPost);
 
-    postQueue.addPostJob('addPostToDb', {
-      key: req.currentUser!.userId,
-      value: createdPost
+    postQueue.savePostToDbJob({
+      userId: req.currentUser!.userId,
+      post: createdPost
     });
 
     res.status(HTTP_STATUS.CREATED).json({ message: 'Post created successfully', post: createdPost });
@@ -53,9 +53,9 @@ export class CreatePostController {
 
     socketIOPostObject.emit('add post', createdPost);
 
-    postQueue.addPostJob('addPostToDb', {
-      key: req.currentUser!.userId,
-      value: createdPost
+    postQueue.savePostToDbJob({
+      userId: req.currentUser!.userId,
+      post: createdPost
     });
 
     res.status(HTTP_STATUS.CREATED).json({ message: 'Post created successfully', post: createdPost });

@@ -16,9 +16,10 @@ export class FollowController {
 
     await followerCache.updateFollowCountInCache(req.currentUser!.userId, followerId, true);
 
-    const cachedFollower: Promise<IUserDocument> = userCache.getUserFromCache(followerId);
-    const cachedFollowee: Promise<IUserDocument> = userCache.getUserFromCache(`${req.currentUser!.userId}`);
-    const [follower, followee] = await Promise.all([cachedFollower, cachedFollowee]);
+    const [follower, followee] = await Promise.all([
+      userCache.getUserFromCache(followerId),
+      userCache.getUserFromCache(`${req.currentUser!.userId}`)
+    ]);
 
     const addFolloweeData: IFollowerData = this.userData(follower);
 
@@ -26,12 +27,12 @@ export class FollowController {
 
     const followerObjectId = new mongoose.Types.ObjectId();
 
-    followerQueue.addFollowerJob('addFollowerToDb', {
-      userId: req.currentUser!.userId,
-      followerId: followerId,
-      username: req.currentUser!.username,
+    followerQueue.addFollowerToDbJob({
+      followee,
+      follower,
       followerDocumentId: followerObjectId
     });
+
     res.status(HTTP_STATUS.OK).json({ message: 'Following user now' });
   }
 

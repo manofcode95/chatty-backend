@@ -1,4 +1,5 @@
 import { parseJson } from '@globals/helpers/utils';
+import { QUEUES } from '@root/shared/constants/keys';
 import { reactionQueue } from '@services/queue/reaction.queue';
 import { postCache } from '@services/redis/post.cache';
 import { reactionCache } from '@services/redis/reaction.cache';
@@ -15,7 +16,7 @@ class RemoveReactionController {
 
     await reactionCache.removePostReactionFromCache(postId, username, updatedReactions);
 
-    reactionQueue.addReactionJob('removeReactionFromDb', { postId, username, previousReaction: type });
+    reactionQueue.removeReactionInDbJob({ postId, username, previousReaction: type });
 
     res.status(HTTP_STATUS.OK).json({ message: 'Reaction removed from post' });
   }

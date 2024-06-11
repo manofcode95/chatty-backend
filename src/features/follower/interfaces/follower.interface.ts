@@ -31,9 +31,21 @@ export interface IFollowerData {
   userProfile?: IUserDocument;
 }
 
-export interface IFollowerJobData {
-  userId?: string;
-  followerId?: string;
-  username?: string;
-  followerDocumentId?: mongoose.Types.ObjectId;
+export interface IAddFollowerJob {
+  followee: IUserDocument;
+  follower: IUserDocument;
+  followerDocumentId: mongoose.Types.ObjectId;
 }
+
+export interface IRemoveFollowerJob {
+  userId: string;
+  followerId: string;
+}
+
+export interface ICreateFollowerNotificationJob {
+  followerObjectId: mongoose.Types.ObjectId;
+  followee: IUserDocument;
+  follower: IUserDocument;
+}
+
+export interface INotifyFollowerEmailJob extends ICreateFollowerNotificationJob {}

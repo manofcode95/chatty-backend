@@ -1,15 +1,16 @@
-import { IAuthJob } from '@auth/interfaces/auth.interface';
+import { ISaveAuthJob } from '@auth/interfaces/auth.interface';
+import { QUEUES } from '@root/shared/constants/keys';
 import { BaseQueue } from '@services/queue/base.queue';
 import { authWorker } from '@workers/auth.worker';
 
 export class AuthQueue extends BaseQueue {
   constructor() {
     super('auth');
-    this.processJob('addAuthUserToDb', 5, authWorker.addAuthUserToDb);
+    this.processJob<ISaveAuthJob>(QUEUES.ADD_AUTH_TO_DB, 5, authWorker.addAuthUserToDb);
   }
 
-  public addAuthUserJob(name: string, data: IAuthJob) {
-    this.addJob(name, data);
+  public saveAuthToDbJob(data: ISaveAuthJob) {
+    this.addJob<ISaveAuthJob>(QUEUES.ADD_AUTH_TO_DB, data);
   }
 }
 

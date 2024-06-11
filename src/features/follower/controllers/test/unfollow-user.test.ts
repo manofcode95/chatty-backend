@@ -28,7 +28,7 @@ describe('Remove', () => {
     const res: Response = followersMockResponse();
     jest.spyOn(FollowerCache.prototype, 'removeFollowerFromCache');
     jest.spyOn(FollowerCache.prototype, 'updateFollowersCountInCache');
-    jest.spyOn(followerQueue, 'addFollowerJob');
+    jest.spyOn(followerQueue, 'addFollowerToDbJob');
 
     await Remove.prototype.follower(req, res);
     expect(FollowerCache.prototype.removeFollowerFromCache).toHaveBeenCalledTimes(2);
@@ -43,7 +43,7 @@ describe('Remove', () => {
     expect(FollowerCache.prototype.updateFollowersCountInCache).toHaveBeenCalledTimes(2);
     expect(FollowerCache.prototype.updateFollowersCountInCache).toHaveBeenCalledWith(`${req.params.followeeId}`, 'followersCount', -1);
     expect(FollowerCache.prototype.updateFollowersCountInCache).toHaveBeenCalledWith(`${req.params.followerId}`, 'followingCount', -1);
-    expect(followerQueue.addFollowerJob).toHaveBeenCalledWith('removeFollowerFromDB', {
+    expect(followerQueue.addFollowerToDbJob).toHaveBeenCalledWith('removeFollowerFromDB', {
       keyOne: `${req.params.followeeId}`,
       keyTwo: `${req.params.followerId}`
     });

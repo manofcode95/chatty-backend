@@ -37,11 +37,19 @@ export interface ISavePostToCache {
   createdPost: IPostDocument;
 }
 
-export interface IPostJobData {
-  key?: string;
-  value?: IPostDocument;
-  keyOne?: string;
-  keyTwo?: string;
+export interface IAddPostJob {
+  userId: string;
+  post: IPostDocument;
+}
+
+export interface IDeletePostJob {
+  postId: string;
+  userId: string;
+}
+
+export interface IUpdatePostJob {
+  postId: string;
+  post: IPostDocument;
 }
 
 export interface IQueryComplete {

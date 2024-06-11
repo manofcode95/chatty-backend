@@ -8,7 +8,7 @@ export class DeletePostController {
   public async deletePost(req: Request, res: Response): Promise<void> {
     socketIOPostObject.emit('delete post', req.params.postId);
     await postCache.deletePostFromCache(req.params.postId, `${req.currentUser!.userId}`);
-    postQueue.addPostJob('deletePostFromDb', { keyOne: req.params.postId, keyTwo: req.currentUser!.userId });
+    postQueue.deletePostInDbJob({ postId: req.params.postId, userId: req.currentUser!.userId });
     res.status(HTTP_STATUS.OK).json({ message: 'Post deleted successfully' });
   }
 }

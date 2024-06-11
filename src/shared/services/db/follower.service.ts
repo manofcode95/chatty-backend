@@ -3,39 +3,46 @@ import { UserModel } from '@user/models/user.model';
 import mongoose, { Query } from 'mongoose';
 import { IFollowerData, IFollowerDocument } from '@follower/interfaces/follower.interface';
 import { IQueryDeleted, IQueryComplete } from '@post/interfaces/post.interface';
+import { emailQueue } from '@services/queue/email.queue';
+import { notificationQueue } from '@services/queue/notification.queue';
+import { IUserDocument } from '@user/interfaces/user.interface';
 
 class FollowerService {
-  public async addFollower(
-    userId: string,
-    followerId: string,
-    username: string,
-    followerDocumentId: mongoose.Types.ObjectId
-  ): Promise<void> {
-    const followeeObjectId = new mongoose.Types.ObjectId(userId);
-    const followerObjectId = new mongoose.Types.ObjectId(followerId);
-
+  public async addFollower(followee: IUserDocument, follower: IUserDocument, followerDocumentId: mongoose.Types.ObjectId): Promise<void> {
     await FollowerModel.create({
       _id: followerDocumentId,
-      followeeId: followeeObjectId,
-      followerId: followerObjectId
+      followeeId: followee._id,
+      followerId: follower._id
     });
 
     const users = UserModel.bulkWrite([
       {
         updateOne: {
-          filter: { _id: userId },
+          filter: { _id: followee._id },
           update: { $inc: { followingCount: 1 } }
         }
       },
       {
         updateOne: {
-          filter: { _id: followerId },
+          filter: { _id: follower._id },
           update: { $inc: { followersCount: 1 } }
         }
       }
     ]);
 
     await Promise.all([users]);
+
+    emailQueue.notifyFollowerByEmailJob({
+      followee,
+      follower,
+      followerObjectId: followerDocumentId
+    });
+
+    notificationQueue.sendFollowerNotification({
+      followee,
+      follower,
+      followerObjectId: followerDocumentId
+    });
   }
 
   public async removeFollower(followeeId: string, followerId: string): Promise<void> {

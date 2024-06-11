@@ -76,16 +76,7 @@ export interface IUserJobInfo {
 }
 
 export interface IUserJob {
-  keyOne?: string;
-  keyTwo?: string;
-  key?: string;
-  value?: string | INotificationSettings | IUserDocument;
-}
-
-export interface IEmailJob {
-  receiverEmail: string;
-  template: string;
-  subject: string;
+  user: IUserDocument;
 }
 
 export interface IAllUsers {
@@ -93,8 +84,8 @@ export interface IAllUsers {
   totalUsers: number;
 }
 
-export interface IBlockedUserJobData {
-  userId?: string;
-  blockedId?: string;
-  type?: 'block' | 'unblock';
+export interface IBlockedUserJob {
+  userId: string;
+  blockedId: string;
+  type: 'block' | 'unblock';
 }

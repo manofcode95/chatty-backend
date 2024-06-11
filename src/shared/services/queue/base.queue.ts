@@ -4,22 +4,39 @@ import { ExpressAdapter } from '@bull-board/express';
 import { createBullBoard } from '@bull-board/api';
 import { BullAdapter } from '@bull-board/api/bullAdapter';
 import { config } from '@root/config';
-import { IAuthJob } from '@auth/interfaces/auth.interface';
-import { IBlockedUserJobData, IEmailJob, IUserJob } from '@user/interfaces/user.interface';
-import { IPostJobData } from '@post/interfaces/post.interface';
-import { IReactionJob } from '@root/features/reaction/interfaces/reaction.interface';
-import { ICommentJob } from '@comment/interfaces/comment.interface';
-import { IFollowerJobData } from '@follower/interfaces/follower.interface';
+import { ISaveAuthJob, ISendFConfirmPasswordEmailJob, ISendForgotPasswordEmailJob } from '@auth/interfaces/auth.interface';
+import { IBlockedUserJob, IUserJob } from '@user/interfaces/user.interface';
+import { IAddPostJob, IDeletePostJob, IUpdatePostJob } from '@post/interfaces/post.interface';
+import {
+  IAddReactionJob,
+  ICreateReactionNotificationJob,
+  INotifyReactionEmailJob,
+  IRemoveReactionJob
+} from '@root/features/reaction/interfaces/reaction.interface';
+import { ICreateCommentNotificationJob, INotifyCommentEmailJob, ISaveCommentJob } from '@comment/interfaces/comment.interface';
+import { ISendNotificationJobData } from '@notification/interfaces/notification.interface';
+import { IAddFollowerJob, INotifyFollowerEmailJob, IRemoveFollowerJob } from '@follower/interfaces/follower.interface';
 
 export type IBaseJobData =
-  | IAuthJob
+  | ISaveAuthJob
   | IUserJob
-  | IEmailJob
-  | IPostJobData
-  | IReactionJob
-  | ICommentJob
-  | IFollowerJobData
-  | IBlockedUserJobData;
+  | IAddPostJob
+  | IUpdatePostJob
+  | IDeletePostJob
+  | IAddReactionJob
+  | IRemoveReactionJob
+  | ISaveCommentJob
+  | IAddFollowerJob
+  | IRemoveFollowerJob
+  | IBlockedUserJob
+  | ICreateCommentNotificationJob
+  | ICreateReactionNotificationJob
+  | ISendNotificationJobData
+  | ISendForgotPasswordEmailJob
+  | ISendFConfirmPasswordEmailJob
+  | INotifyCommentEmailJob
+  | INotifyFollowerEmailJob
+  | INotifyReactionEmailJob;
 
 let bullAdapters: BullAdapter[] = [];
 
@@ -63,11 +80,11 @@ export abstract class BaseQueue {
     });
   }
 
-  protected addJob(name: string, data: IBaseJobData): void {
+  protected addJob<T extends IBaseJobData>(name: string, data: T): void {
     this.queue.add(name, data, { attempts: 3, backoff: { type: 'fixed', delay: 5000 } });
   }
 
-  protected processJob(name: string, concurrency: number, callback: Queue.ProcessCallbackFunction<IBaseJobData>): void {
+  protected processJob<T extends IBaseJobData>(name: string, concurrency: number, callback: Queue.ProcessCallbackFunction<T>): void {
     this.queue.process(name, concurrency, callback);
   }
 }

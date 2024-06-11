@@ -2,6 +2,7 @@ import { Request, Response } from 'express';
 import HTTP_STATUS from 'http-status-codes';
 import { followerCache } from '@services/redis/follower.cache';
 import { followerQueue } from '@services/queue/follower.queue';
+import { QUEUES } from '@root/shared/constants/keys';
 
 export class UnfollowController {
   public async unfollow(req: Request, res: Response): Promise<void> {
@@ -9,7 +10,7 @@ export class UnfollowController {
 
     await followerCache.updateFollowCountInCache(req.currentUser!.userId, followerId, false);
 
-    followerQueue.addFollowerJob('removeFollowerFromDb', {
+    followerQueue.removeFollowerInDbJob({
       userId: req.currentUser!.userId,
       followerId
     });

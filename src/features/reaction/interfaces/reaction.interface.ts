@@ -1,3 +1,4 @@
+import { IPostDocument } from '@post/interfaces/post.interface';
 import { Document, Types } from 'mongoose';
 
 export interface IReactionDocument extends Document {
@@ -21,14 +22,20 @@ export interface IReactions {
   angry: number;
 }
 
-export interface IReactionJob {
+export interface IAddReactionJob {
   postId: string;
   username: string;
   previousReaction: string;
-  userTo?: string;
-  userFrom?: string;
-  type?: string;
-  reactionObject?: IReactionDocument;
+  userTo: string;
+  userFrom: string;
+  type: string;
+  reactionObject: IReactionDocument;
+}
+
+export interface IRemoveReactionJob {
+  postId: string;
+  username: string;
+  previousReaction: string;
 }
 
 export interface IQueryReaction {
@@ -39,4 +46,16 @@ export interface IQueryReaction {
 export interface IReaction {
   senderName: string;
   type: string;
+}
+
+export interface ICreateReactionNotificationJob {
+  userFromId: string;
+  userToId: string;
+  post: IPostDocument;
+  reaction: IReactionDocument;
+}
+
+export interface INotifyReactionEmailJob {
+  userFromId: string;
+  userToId: string;
 }

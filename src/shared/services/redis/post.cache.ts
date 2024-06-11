@@ -70,6 +70,26 @@ class PostCache extends BaseCache {
     }
   }
 
+  public async getPostFromCache(postId: string): Promise<IPostDocument> {
+    try {
+      if (!this.client.isOpen) {
+        await this.client.connect();
+      }
+
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const post: IPostDocument = (await this.client.hGetAll(`posts:${postId}`)) as any as IPostDocument;
+
+      post.commentsCount = parseJson(post.commentsCount) as number;
+      post.reactions = parseJson(post.reactions) as IReactions;
+      post.createdAt = new Date(post.createdAt as Date);
+
+      return post;
+    } catch (err) {
+      this.log.error(err);
+      throw new ServerError('Server error. Try again');
+    }
+  }
+
   public async getPostsFromCache(key: string, start: number, end: number): Promise<IPostDocument[]> {
     try {
       if (!this.client.isOpen) {

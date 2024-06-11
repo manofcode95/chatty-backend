@@ -2,16 +2,13 @@
 @urlPath = api/v1
 
 ###
-POST {{baseUrl}}/{{urlPath}}/comment
+POST {{baseUrl}}/{{urlPath}}/comment/6667363d274f7b4549064e71
 Content-Type: application/json
 Accept: application/json
 withCredentials: true
 
 {
-  "userTo": "6633870d41901aeb6e55d66f",
-  "postId": "6659ee3f25e0ae569691a8f1",
-  "comment": "my comment",
-  "profilePicture": "https://res.cloudinary.com/dlbhnqmyr/image/upload/v1711805433/660813f89f80db7b57daf3c9"
+  "comment": "my comment 1`"
 }
 
 ###

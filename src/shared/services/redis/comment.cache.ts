@@ -12,15 +12,15 @@ class CommentCache extends BaseCache {
     super('commentsCache');
   }
 
-  public async savePostCommentToCache(postId: string, comment: ICommentDocument): Promise<void> {
+  public async savePostCommentToCache(comment: ICommentDocument): Promise<void> {
     try {
       if (!this.client.isOpen) {
         await this.client.connect();
       }
       const multi: ReturnType<typeof this.client.multi> = this.client.multi();
 
-      multi.LPUSH(`comments:${postId}`, JSON.stringify(comment));
-      multi.HINCRBY(`posts:${postId}`, 'commentsCount', 1);
+      multi.LPUSH(`comments:${comment.postId}`, JSON.stringify(comment));
+      multi.HINCRBY(`posts:${comment.postId}`, 'commentsCount', 1);
 
       await multi.exec();
     } catch (error) {

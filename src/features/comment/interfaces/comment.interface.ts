@@ -1,3 +1,4 @@
+import { IUserDocument } from '@user/interfaces/user.interface';
 import mongoose from 'mongoose';
 
 export interface ICommentDocument extends Document {
@@ -11,13 +12,17 @@ export interface ICommentDocument extends Document {
   userTo?: string | mongoose.Types.ObjectId;
 }
 
-export interface ICommentJob {
-  postId: string;
-  userTo: string;
-  userFrom: string;
-  username: string;
+export interface ISaveCommentJob {
+  user: IUserDocument;
   comment: ICommentDocument;
 }
+
+export interface ICreateCommentNotificationJob {
+  user: IUserDocument;
+  comment: ICommentDocument;
+}
+
+export interface INotifyCommentEmailJob extends ICreateCommentNotificationJob {}
 
 export interface ICommentNameList {
   count: number;

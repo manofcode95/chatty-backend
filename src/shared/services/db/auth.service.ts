@@ -1,6 +1,8 @@
 import { IAuthDocument } from '@auth/interfaces/auth.interface';
 import { AuthModel } from '@auth/models/auth.model';
+import { config } from '@root/config';
 import { firstLetterUppercase, lowerCase } from '@root/shared/globals/helpers/utils';
+import { emailQueue } from '@services/queue/email.queue';
 
 class AuthService {
   public async createAuthUser(data: IAuthDocument): Promise<void> {
@@ -28,14 +30,18 @@ class AuthService {
     return user;
   }
 
-  public async updatePasswordToken(authId: string, token: string, tokenExpiration: number): Promise<void> {
+  public async updatePasswordToken(auth: IAuthDocument, token: string, tokenExpiration: number): Promise<void> {
     await AuthModel.updateOne(
-      { _id: authId },
+      { _id: auth._id },
       {
         passwordResetToken: token,
         passwordResetExpires: tokenExpiration
       }
     );
+
+    const resetLink = `${config.CLIENT_URL}/reset-password?token=${token}`;
+
+    emailQueue.sendForgotPasswordEmailJob({ auth, resetLink });
   }
 
   public async getAuthUserByPasswordToken(token: string): Promise<IAuthDocument | null> {

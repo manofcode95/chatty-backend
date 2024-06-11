@@ -1,15 +1,16 @@
-import { ICommentJob } from '@comment/interfaces/comment.interface';
+import { ISaveCommentJob } from '@comment/interfaces/comment.interface';
+import { QUEUES } from '@root/shared/constants/keys';
 import { BaseQueue } from '@services/queue/base.queue';
 import { commentWorker } from '@workers/comment.worker';
 
 class CommentQueue extends BaseQueue {
   constructor() {
     super('comments');
-    this.processJob('addCommentToDb', 5, commentWorker.addCommentToDb);
+    this.processJob<ISaveCommentJob>(QUEUES.ADD_COMMENT_TO_DB, 5, commentWorker.addCommentToDb);
   }
 
-  public addCommentJob(name: string, data: ICommentJob): void {
-    this.addJob(name, data);
+  public saveCommentToDbJob(data: ISaveCommentJob) {
+    this.addJob<ISaveCommentJob>(QUEUES.ADD_COMMENT_TO_DB, data);
   }
 }
 
