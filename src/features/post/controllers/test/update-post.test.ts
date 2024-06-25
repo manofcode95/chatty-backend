@@ -30,12 +30,12 @@ describe('Update', () => {
       const res: Response = postMockResponse();
       const postSpy = jest.spyOn(postCache, 'updatePostInCache').mockResolvedValue(postMockData);
       jest.spyOn(socketIOPostObject, 'emit');
-      jest.spyOn(postQueue, 'updatePostInDb');
+      jest.spyOn(postQueue, 'updatePostInDB');
 
       await updatePostController.updatePost(req, res);
       expect(postSpy).toHaveBeenCalledWith(`${postMockData._id}`, updatedPost);
       expect(socketIOPostObject.emit).toHaveBeenCalledWith('update post', postMockData, 'posts');
-      expect(postQueue.updatePostInDb).toHaveBeenCalledWith('updatePostInDb', { key: `${postMockData._id}`, value: postMockData });
+      expect(postQueue.updatePostInDB).toHaveBeenCalledWith('updatePostInDB', { key: `${postMockData._id}`, value: postMockData });
       expect(res.status).toHaveBeenCalledWith(200);
       expect(res.json).toHaveBeenCalledWith({
         message: 'Post updated successfully'
@@ -55,12 +55,12 @@ describe('Update', () => {
       const res: Response = postMockResponse();
       const postSpy = jest.spyOn(postCache, 'updatePostInCache').mockImplementationOnce(() => Promise.resolve(postMockData));
       jest.spyOn(socketIOPostObject, 'emit');
-      jest.spyOn(postQueue, 'updatePostInDb');
+      jest.spyOn(postQueue, 'updatePostInDB');
 
       await updatePostController.updatePostWithImage(req, res);
       expect(postCache.updatePostInCache).toHaveBeenCalledWith(`${postMockData._id}`, postSpy.mock.calls[0][1]);
       expect(socketIOPostObject.emit).toHaveBeenCalledWith('update post', postMockData, 'posts');
-      expect(postQueue.updatePostInDb).toHaveBeenCalledWith('updatePostInDb', { key: `${postMockData._id}`, value: postMockData });
+      expect(postQueue.updatePostInDB).toHaveBeenCalledWith('updatePostInDB', { key: `${postMockData._id}`, value: postMockData });
       expect(res.status).toHaveBeenCalledWith(200);
       expect(res.json).toHaveBeenCalledWith({
         message: 'Post with image updated successfully'
@@ -79,12 +79,12 @@ describe('Update', () => {
       const postSpy = jest.spyOn(postCache, 'updatePostInCache').mockImplementationOnce(() => Promise.resolve(postMockData));
       jest.spyOn(imageHandler, 'upload').mockImplementation((): any => Promise.resolve({ version: '1234', public_id: '123456' }));
       jest.spyOn(socketIOPostObject, 'emit');
-      jest.spyOn(postQueue, 'updatePostInDb');
+      jest.spyOn(postQueue, 'updatePostInDB');
 
       await updatePostController.updatePostWithImage(req, res);
       expect(postCache.updatePostInCache).toHaveBeenCalledWith(`${postMockData._id}`, postSpy.mock.calls[0][1]);
       expect(socketIOPostObject.emit).toHaveBeenCalledWith('update post', postMockData, 'posts');
-      expect(postQueue.updatePostInDb).toHaveBeenCalledWith('updatePostInDb', { key: `${postMockData._id}`, value: postMockData });
+      expect(postQueue.updatePostInDB).toHaveBeenCalledWith('updatePostInDB', { key: `${postMockData._id}`, value: postMockData });
       expect(res.status).toHaveBeenCalledWith(200);
       expect(res.json).toHaveBeenCalledWith({
         message: 'Post with image updated successfully'

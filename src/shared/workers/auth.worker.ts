@@ -7,7 +7,7 @@ import Logger from 'bunyan';
 const log: Logger = config.createLogger('authWorker');
 
 export class AuthWorker {
-  async addAuthUserToDb(job: Job<ISaveAuthJob>, done: DoneCallback) {
+  async addAuthUserToDB(job: Job<ISaveAuthJob>, done: DoneCallback) {
     try {
       const { auth } = job.data;
       await authService.createAuthUser(auth);

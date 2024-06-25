@@ -32,7 +32,7 @@ class AddCommentController {
       comment: commentDoc
     };
 
-    commentQueue.saveCommentToDbJob(databaseCommentData);
+    commentQueue.saveCommentToDBJob(databaseCommentData);
 
     res.status(HTTP_STATUS.OK).json({ message: 'Comment created successfully' });
   }

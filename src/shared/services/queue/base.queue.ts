@@ -16,6 +16,7 @@ import {
 import { ICreateCommentNotificationJob, INotifyCommentEmailJob, ISaveCommentJob } from '@comment/interfaces/comment.interface';
 import { ISendNotificationJobData } from '@notification/interfaces/notification.interface';
 import { IAddFollowerJob, INotifyFollowerEmailJob, IRemoveFollowerJob } from '@follower/interfaces/follower.interface';
+import { IFileImageJobData } from '@image/interfaces/image.interface';
 
 export type IBaseJobData =
   | ISaveAuthJob
@@ -36,7 +37,8 @@ export type IBaseJobData =
   | ISendFConfirmPasswordEmailJob
   | INotifyCommentEmailJob
   | INotifyFollowerEmailJob
-  | INotifyReactionEmailJob;
+  | INotifyReactionEmailJob
+  | IFileImageJobData;
 
 let bullAdapters: BullAdapter[] = [];
 

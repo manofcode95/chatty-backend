@@ -49,7 +49,7 @@ export class UpdatePostController {
 
     const postUpdated: IPostDocument = await postCache.updatePostInCache(postId, updatedPost);
     socketIOPostObject.emit('update post', postUpdated, 'posts');
-    postQueue.updatePostInDbJob({ postId, post: postUpdated });
+    postQueue.updatePostInDBJob({ postId, post: postUpdated });
   }
 
   async addImageToExistingPost(req: Request): Promise<UploadApiResponse> {
@@ -76,7 +76,7 @@ export class UpdatePostController {
 
     const postUpdated: IPostDocument = await postCache.updatePostInCache(postId, updatedPost);
     socketIOPostObject.emit('update post', postUpdated, 'posts');
-    postQueue.updatePostInDbJob({ postId, post: postUpdated });
+    postQueue.updatePostInDBJob({ postId, post: postUpdated });
 
     // TODO image queue
     // if (image) {

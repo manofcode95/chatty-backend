@@ -6,10 +6,10 @@ import { commentWorker } from '@workers/comment.worker';
 class CommentQueue extends BaseQueue {
   constructor() {
     super('comments');
-    this.processJob<ISaveCommentJob>(QUEUES.ADD_COMMENT_TO_DB, 5, commentWorker.addCommentToDb);
+    this.processJob<ISaveCommentJob>(QUEUES.ADD_COMMENT_TO_DB, 5, commentWorker.addCommentToDB);
   }
 
-  public saveCommentToDbJob(data: ISaveCommentJob) {
+  public saveCommentToDBJob(data: ISaveCommentJob) {
     this.addJob<ISaveCommentJob>(QUEUES.ADD_COMMENT_TO_DB, data);
   }
 }

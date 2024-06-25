@@ -25,7 +25,7 @@ export class CreatePostController {
 
     socketIOPostObject.emit('add post', createdPost);
 
-    postQueue.savePostToDbJob({
+    postQueue.savePostToDBJob({
       userId: req.currentUser!.userId,
       post: createdPost
     });
@@ -53,7 +53,7 @@ export class CreatePostController {
 
     socketIOPostObject.emit('add post', createdPost);
 
-    postQueue.savePostToDbJob({
+    postQueue.savePostToDBJob({
       userId: req.currentUser!.userId,
       post: createdPost
     });

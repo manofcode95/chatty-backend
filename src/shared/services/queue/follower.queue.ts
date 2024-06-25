@@ -6,15 +6,15 @@ import { followerWorker } from '@workers/follower.worker';
 class FollowerQueue extends BaseQueue {
   constructor() {
     super('followers');
-    this.processJob<IAddFollowerJob>(QUEUES.ADD_FOLLOWER_TO_DB, 5, followerWorker.addFollowerToDb);
-    this.processJob<IRemoveFollowerJob>(QUEUES.REMOVE_FOLLOWER_FROM_DB, 5, followerWorker.removeFollowerFromDb);
+    this.processJob<IAddFollowerJob>(QUEUES.ADD_FOLLOWER_TO_DB, 5, followerWorker.addFollowerToDB);
+    this.processJob<IRemoveFollowerJob>(QUEUES.REMOVE_FOLLOWER_FROM_DB, 5, followerWorker.removeFollowerFromDB);
   }
 
-  addFollowerToDbJob(data: IAddFollowerJob) {
+  addFollowerToDBJob(data: IAddFollowerJob) {
     this.addJob<IAddFollowerJob>(QUEUES.ADD_FOLLOWER_TO_DB, data);
   }
 
-  removeFollowerInDbJob(data: IRemoveFollowerJob) {
+  removeFollowerInDBJob(data: IRemoveFollowerJob) {
     this.addJob<IRemoveFollowerJob>(QUEUES.REMOVE_FOLLOWER_FROM_DB, data);
   }
 }

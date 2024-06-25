@@ -1,7 +1,9 @@
 import { ServerError } from '@globals/helpers/error-handler';
 import { parseJson } from '@root/shared/globals/helpers/utils';
 import { BaseCache } from '@services/redis/base.cache';
-import { IUserDocument } from '@user/interfaces/user.interface';
+import { INotificationSettings, ISocialLinks, IUserDocument } from '@user/interfaces/user.interface';
+
+type UserItem = string | ISocialLinks | INotificationSettings;
 
 export class UserCache extends BaseCache {
   constructor() {
@@ -118,6 +120,20 @@ export class UserCache extends BaseCache {
       multi.HSET(`users:${blockedId}`, 'blockedBy', JSON.stringify(blockedBy));
 
       await multi.exec();
+    } catch (error) {
+      this.log.error(error);
+      throw new ServerError('Server error. Try again.');
+    }
+  }
+
+  public async updateSingleUserItemInCache(userId: string, prop: string, value: UserItem): Promise<IUserDocument | null> {
+    try {
+      if (!this.client.isOpen) {
+        await this.client.connect();
+      }
+      await this.client.HSET(`users:${userId}`, `${prop}`, JSON.stringify(value));
+      const response: IUserDocument = (await this.getUserFromCache(userId)) as IUserDocument;
+      return response;
     } catch (error) {
       this.log.error(error);
       throw new ServerError('Server error. Try again.');

@@ -6,15 +6,15 @@ import { reactionWorker } from '@workers/reaction.worker';
 class ReactionQueue extends BaseQueue {
   constructor() {
     super('reaction');
-    this.processJob<IAddReactionJob>(QUEUES.ADD_REACTION_TO_DB, 5, reactionWorker.addReactionToDb);
-    this.processJob<IRemoveReactionJob>(QUEUES.REMOVE_REACTION_FROM_DB, 5, reactionWorker.removeReactionFromDb);
+    this.processJob<IAddReactionJob>(QUEUES.ADD_REACTION_TO_DB, 5, reactionWorker.addReactionToDB);
+    this.processJob<IRemoveReactionJob>(QUEUES.REMOVE_REACTION_FROM_DB, 5, reactionWorker.removeReactionFromDB);
   }
 
-  public saveReactionToDbJob(data: IAddReactionJob) {
+  public saveReactionToDBJob(data: IAddReactionJob) {
     this.addJob<IAddReactionJob>(QUEUES.ADD_REACTION_TO_DB, data);
   }
 
-  public removeReactionInDbJob(data: IRemoveReactionJob) {
+  public removeReactionInDBJob(data: IRemoveReactionJob) {
     this.addJob<IRemoveReactionJob>(QUEUES.REMOVE_REACTION_FROM_DB, data);
   }
 }

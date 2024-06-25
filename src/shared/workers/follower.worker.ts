@@ -7,7 +7,7 @@ import { IAddFollowerJob, IRemoveFollowerJob } from '@follower/interfaces/follow
 const log: Logger = config.createLogger('followerWorker');
 
 class FollowerWorker {
-  async addFollowerToDb(job: Job<IAddFollowerJob>, done: DoneCallback): Promise<void> {
+  async addFollowerToDB(job: Job<IAddFollowerJob>, done: DoneCallback): Promise<void> {
     try {
       const { followee, follower, followerDocumentId } = job.data;
       await followerService.addFollower(followee, follower, followerDocumentId);
@@ -19,7 +19,7 @@ class FollowerWorker {
     }
   }
 
-  async removeFollowerFromDb(job: Job<IRemoveFollowerJob>, done: DoneCallback): Promise<void> {
+  async removeFollowerFromDB(job: Job<IRemoveFollowerJob>, done: DoneCallback): Promise<void> {
     try {
       const { userId, followerId } = job.data;
       await followerService.removeFollower(userId, followerId);

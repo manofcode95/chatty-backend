@@ -69,14 +69,14 @@ describe('Add', () => {
       });
     });
 
-    it('should call followerQueue addFollowerToDbJob', async () => {
+    it('should call followerQueue addFollowerToDBJob', async () => {
       const req: Request = followersMockRequest({}, authUserPayload, { followerId: '6064861bc25eaa5a5d2f9bf4' }) as Request;
       const res: Response = followersMockResponse();
-      const spy = jest.spyOn(followerQueue, 'addFollowerToDbJob');
+      const spy = jest.spyOn(followerQueue, 'addFollowerToDBJob');
       jest.spyOn(UserCache.prototype, 'getUserFromCache').mockResolvedValue(existingUser);
 
       await Add.prototype.follower(req, res);
-      expect(followerQueue.addFollowerToDbJob).toHaveBeenCalledWith('addFollowerToDB', {
+      expect(followerQueue.addFollowerToDBJob).toHaveBeenCalledWith('addFollowerToDB', {
         keyOne: `${req.currentUser?.userId}`,
         keyTwo: '6064861bc25eaa5a5d2f9bf4',
         username: req.currentUser?.username,

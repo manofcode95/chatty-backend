@@ -36,7 +36,7 @@ class AddReactionController {
       reactionObject
     };
 
-    reactionQueue.saveReactionToDbJob(databaseReactionData);
+    reactionQueue.saveReactionToDBJob(databaseReactionData);
 
     res.status(HTTP_STATUS.OK).json({ message: 'Reaction added successfully' });
   }

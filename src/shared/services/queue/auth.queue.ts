@@ -6,10 +6,10 @@ import { authWorker } from '@workers/auth.worker';
 export class AuthQueue extends BaseQueue {
   constructor() {
     super('auth');
-    this.processJob<ISaveAuthJob>(QUEUES.ADD_AUTH_TO_DB, 5, authWorker.addAuthUserToDb);
+    this.processJob<ISaveAuthJob>(QUEUES.ADD_AUTH_TO_DB, 5, authWorker.addAuthUserToDB);
   }
 
-  public saveAuthToDbJob(data: ISaveAuthJob) {
+  public saveAuthToDBJob(data: ISaveAuthJob) {
     this.addJob<ISaveAuthJob>(QUEUES.ADD_AUTH_TO_DB, data);
   }
 }

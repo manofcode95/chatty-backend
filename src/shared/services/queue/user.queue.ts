@@ -6,15 +6,15 @@ import { userWorker } from '@workers/user.worker';
 export class UserQueue extends BaseQueue {
   constructor() {
     super('user');
-    this.processJob<IUserJob>(QUEUES.ADD_USER_TO_DB, 5, userWorker.addUserToDb);
-    this.processJob<IBlockedUserJob>(QUEUES.UPDATE_BLOCKED_USER_IN_DB, 5, userWorker.addBlockedUserToDb);
+    this.processJob<IUserJob>(QUEUES.ADD_USER_TO_DB, 5, userWorker.addUserToDB);
+    this.processJob<IBlockedUserJob>(QUEUES.UPDATE_BLOCKED_USER_IN_DB, 5, userWorker.addBlockedUserToDB);
   }
 
-  saveUserToDbJob(data: IUserJob) {
+  saveUserToDBJob(data: IUserJob) {
     this.addJob<IUserJob>(QUEUES.ADD_USER_TO_DB, data);
   }
 
-  addBlockedUserInDbJob(data: IBlockedUserJob) {
+  addBlockedUserInDBJob(data: IBlockedUserJob) {
     this.addJob<IBlockedUserJob>(QUEUES.UPDATE_BLOCKED_USER_IN_DB, data);
   }
 }

@@ -7,7 +7,7 @@ import Logger from 'bunyan';
 const log: Logger = config.createLogger('reactionWorker');
 
 export class ReactionWorker {
-  async addReactionToDb(job: Job<IAddReactionJob>, done: DoneCallback) {
+  async addReactionToDB(job: Job<IAddReactionJob>, done: DoneCallback) {
     try {
       const { data } = job;
       await reactionService.saveReaction(data);
@@ -19,7 +19,7 @@ export class ReactionWorker {
     }
   }
 
-  async removeReactionFromDb(job: Job<IRemoveReactionJob>, done: DoneCallback) {
+  async removeReactionFromDB(job: Job<IRemoveReactionJob>, done: DoneCallback) {
     try {
       const { data } = job;
       await reactionService.removeReaction(data);

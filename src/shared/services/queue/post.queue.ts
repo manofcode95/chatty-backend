@@ -6,20 +6,20 @@ import { postWorker } from '@workers/post.worker';
 export class PostQueue extends BaseQueue {
   constructor() {
     super('post');
-    this.processJob<IAddPostJob>(QUEUES.ADD_POST_TO_DB, 5, postWorker.addPostToDb);
-    this.processJob<IDeletePostJob>(QUEUES.DELETE_POST_FROM_DB, 5, postWorker.deletePostFromDb);
-    this.processJob<IUpdatePostJob>(QUEUES.UPDATE_POST_IN_DB, 5, postWorker.updatePostInDb);
+    this.processJob<IAddPostJob>(QUEUES.ADD_POST_TO_DB, 5, postWorker.addPostToDB);
+    this.processJob<IDeletePostJob>(QUEUES.DELETE_POST_FROM_DB, 5, postWorker.deletePostFromDB);
+    this.processJob<IUpdatePostJob>(QUEUES.UPDATE_POST_IN_DB, 5, postWorker.updatePostInDB);
   }
 
-  public savePostToDbJob(data: IAddPostJob) {
+  public savePostToDBJob(data: IAddPostJob) {
     this.addJob<IAddPostJob>(QUEUES.ADD_POST_TO_DB, data);
   }
 
-  public deletePostInDbJob(data: IDeletePostJob) {
+  public deletePostInDBJob(data: IDeletePostJob) {
     this.addJob<IDeletePostJob>(QUEUES.DELETE_POST_FROM_DB, data);
   }
 
-  public updatePostInDbJob(data: IUpdatePostJob) {
+  public updatePostInDBJob(data: IUpdatePostJob) {
     this.addJob<IUpdatePostJob>(QUEUES.UPDATE_POST_IN_DB, data);
   }
 }

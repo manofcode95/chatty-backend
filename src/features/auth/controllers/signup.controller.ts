@@ -53,8 +53,8 @@ export class SignupController {
     await userCache.saveUserToCache(`${userObjectId}`, uId, userDataForCache);
 
     // Add to database
-    authQueue.saveAuthToDbJob({ auth: authData });
-    userQueue.saveUserToDbJob({ user: userDataForCache });
+    authQueue.saveAuthToDBJob({ auth: authData });
+    userQueue.saveUserToDBJob({ user: userDataForCache });
 
     // Gen token
     const userJwt = authUtil.signToken(authData, userObjectId);

@@ -6,7 +6,7 @@ import { emailQueue } from '@services/queue/email.queue';
 import { notificationQueue } from '@services/queue/notification.queue';
 
 class CommentService {
-  public async addCommentToDb(commentData: ISaveCommentJob): Promise<void> {
+  public async addCommentToDB(commentData: ISaveCommentJob): Promise<void> {
     const { user, comment } = commentData;
 
     await Promise.all([

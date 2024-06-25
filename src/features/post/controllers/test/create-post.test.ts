@@ -19,7 +19,7 @@ describe('Create Post', () => {
 
     const createdPost = jest.spyOn(postUtil, 'createPostDocument');
     const savePostToCache = jest.spyOn(postCache, 'savePostToCache');
-    const savePostToDbJob = jest.spyOn(postQueue, 'addPostToDb');
+    const savePostToDBJob = jest.spyOn(postQueue, 'addPostToDB');
 
     await createPostController.createPost(req, res);
 
@@ -27,7 +27,7 @@ describe('Create Post', () => {
 
     expect(savePostToCache).toHaveBeenCalled();
 
-    expect(savePostToDbJob).toHaveBeenCalled();
+    expect(savePostToDBJob).toHaveBeenCalled();
 
     expect(res.json).toHaveBeenCalledWith({
       message: 'Post created successfully',

@@ -27,7 +27,7 @@ export class FollowController {
 
     const followerObjectId = new mongoose.Types.ObjectId();
 
-    followerQueue.addFollowerToDbJob({
+    followerQueue.addFollowerToDBJob({
       followee,
       follower,
       followerDocumentId: followerObjectId

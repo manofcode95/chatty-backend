@@ -7,7 +7,7 @@ import Logger from 'bunyan';
 const log: Logger = config.createLogger('postWorker');
 
 export class PostWorker {
-  async addPostToDb(job: Job<IAddPostJob>, done: DoneCallback) {
+  async addPostToDB(job: Job<IAddPostJob>, done: DoneCallback) {
     try {
       const { userId, post } = job.data;
       await postService.createPost(userId, post);
@@ -19,7 +19,7 @@ export class PostWorker {
     }
   }
 
-  async deletePostFromDb(job: Job<IDeletePostJob>, done: DoneCallback): Promise<void> {
+  async deletePostFromDB(job: Job<IDeletePostJob>, done: DoneCallback): Promise<void> {
     try {
       const { postId, userId } = job.data;
       await postService.deletePost(postId, userId);
@@ -31,7 +31,7 @@ export class PostWorker {
     }
   }
 
-  async updatePostInDb(job: Job<IUpdatePostJob>, done: DoneCallback): Promise<void> {
+  async updatePostInDB(job: Job<IUpdatePostJob>, done: DoneCallback): Promise<void> {
     try {
       const { postId, post } = job.data;
       await postService.updatePost(postId, post);

@@ -45,7 +45,7 @@ describe('AddReaction', () => {
     });
 
     const spy = jest.spyOn(reactionCache, 'savePostReactionToCache');
-    const reactionSpy = jest.spyOn(reactionQueue, 'saveReactionToDbJob');
+    const reactionSpy = jest.spyOn(reactionQueue, 'saveReactionToDBJob');
 
     await addReactionController.addReaction(req, res);
     expect(reactionCache.savePostReactionToCache).toHaveBeenCalledWith(
@@ -55,7 +55,7 @@ describe('AddReaction', () => {
       spy.mock.calls[0][3],
       spy.mock.calls[0][4]
     );
-    expect(reactionQueue.saveReactionToDbJob).toHaveBeenCalledWith(reactionSpy.mock.calls[0][0], reactionSpy.mock.calls[0][1]);
+    expect(reactionQueue.saveReactionToDBJob).toHaveBeenCalledWith(reactionSpy.mock.calls[0][0], reactionSpy.mock.calls[0][1]);
     expect(res.status).toHaveBeenCalledWith(200);
     expect(res.json).toHaveBeenCalledWith({
       message: 'Reaction added successfully'

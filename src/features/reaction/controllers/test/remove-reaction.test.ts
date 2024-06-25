@@ -41,14 +41,14 @@ describe('Remove', () => {
 
     jest.spyOn(postCache, 'getPostReaction').mockResolvedValue(postReactions);
     jest.spyOn(reactionCache, 'removePostReactionFromCache');
-    const spy = jest.spyOn(reactionQueue, 'saveReactionToDbJob');
+    const spy = jest.spyOn(reactionQueue, 'saveReactionToDBJob');
 
     await removeReactionController.removeReaction(req, res);
     expect(reactionCache.removePostReactionFromCache).toHaveBeenCalledWith('6027f77087c9d9ccb1555268', `${req.currentUser?.username}`, {
       ...postReactions,
       [type]: postReactions[type] - 1
     });
-    expect(reactionQueue.saveReactionToDbJob).toHaveBeenCalledWith(spy.mock.calls[0][0], spy.mock.calls[0][1]);
+    expect(reactionQueue.saveReactionToDBJob).toHaveBeenCalledWith(spy.mock.calls[0][0], spy.mock.calls[0][1]);
     expect(res.status).toHaveBeenCalledWith(200);
     expect(res.json).toHaveBeenCalledWith({
       message: 'Reaction removed from post'

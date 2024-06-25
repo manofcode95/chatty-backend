@@ -16,7 +16,7 @@ class RemoveReactionController {
 
     await reactionCache.removePostReactionFromCache(postId, username, updatedReactions);
 
-    reactionQueue.removeReactionInDbJob({ postId, username, previousReaction: type });
+    reactionQueue.removeReactionInDBJob({ postId, username, previousReaction: type });
 
     res.status(HTTP_STATUS.OK).json({ message: 'Reaction removed from post' });
   }

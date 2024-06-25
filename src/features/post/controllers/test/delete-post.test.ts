@@ -26,12 +26,12 @@ describe('Delete', () => {
     const req: Request = postMockRequest(newPost, authUserPayload, { postId: '12345' }) as Request;
     const res: Response = postMockResponse();
     jest.spyOn(postCache, 'deletePostFromCache');
-    jest.spyOn(postQueue, 'deletePostFromDb');
+    jest.spyOn(postQueue, 'deletePostFromDB');
 
     await deletePostController.deletePost(req, res);
     expect(socketIOPostObject.emit).toHaveBeenCalledWith('delete post', req.params.postId);
     expect(postCache.deletePostFromCache).toHaveBeenCalledWith(req.params.postId, `${req.currentUser?.userId}`);
-    expect(postQueue.deletePostFromDb).toHaveBeenCalledWith('deletePostFromDb', {
+    expect(postQueue.deletePostFromDB).toHaveBeenCalledWith('deletePostFromDB', {
       keyOne: req.params.postId,
       keyTwo: req.currentUser?.userId
     });

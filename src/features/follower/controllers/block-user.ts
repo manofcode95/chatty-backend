@@ -9,7 +9,7 @@ export class AddUser {
   public async block(req: Request, res: Response): Promise<void> {
     const { followerId } = req.params;
     AddUser.prototype.updateBlockedUser(followerId, req.currentUser!.userId, 'block');
-    blockedUserQueue.addBlockedUserInDbJob('addBlockedUserToDB', {
+    blockedUserQueue.addBlockedUserInDBJob('addBlockedUserToDB', {
       keyOne: `${req.currentUser!.userId}`,
       keyTwo: `${followerId}`,
       type: 'block'
@@ -20,7 +20,7 @@ export class AddUser {
   public async unblock(req: Request, res: Response): Promise<void> {
     const { followerId } = req.params;
     AddUser.prototype.updateBlockedUser(followerId, req.currentUser!.userId, 'unblock');
-    blockedUserQueue.addBlockedUserInDbJob('removeBlockedUserFromDB', {
+    blockedUserQueue.addBlockedUserInDBJob('removeBlockedUserFromDB', {
       keyOne: `${req.currentUser!.userId}`,
       keyTwo: `${followerId}`,
       type: 'unblock'

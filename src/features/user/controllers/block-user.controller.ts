@@ -9,7 +9,7 @@ class BlockUserController {
 
     await userCache.handleBlockUserInCache(req.currentUser!.userId, blockedId, 'block');
 
-    userQueue.addBlockedUserInDbJob({
+    userQueue.addBlockedUserInDBJob({
       userId: `${req.currentUser!.userId}`,
       blockedId: blockedId,
       type: 'block'
@@ -23,7 +23,7 @@ class BlockUserController {
 
     await userCache.handleBlockUserInCache(req.currentUser!.userId, blockedId, 'unblock');
 
-    userQueue.addBlockedUserInDbJob({
+    userQueue.addBlockedUserInDBJob({
       userId: `${req.currentUser!.userId}`,
       blockedId: blockedId,
       type: 'unblock'

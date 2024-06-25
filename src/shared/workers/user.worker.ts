@@ -7,7 +7,7 @@ import Logger from 'bunyan';
 const log: Logger = config.createLogger('userWorker');
 
 export class UserWorker {
-  async addUserToDb(job: Job<IUserJob>, done: DoneCallback) {
+  async addUserToDB(job: Job<IUserJob>, done: DoneCallback) {
     try {
       const { user } = job.data;
       await userService.createUser(user);
@@ -19,7 +19,7 @@ export class UserWorker {
     }
   }
 
-  async addBlockedUserToDb(job: Job<IBlockedUserJob>, done: DoneCallback): Promise<void> {
+  async addBlockedUserToDB(job: Job<IBlockedUserJob>, done: DoneCallback): Promise<void> {
     try {
       const { userId, blockedId, type } = job.data;
       if (type === 'block') {

@@ -10,7 +10,7 @@ export class UnfollowController {
 
     await followerCache.updateFollowCountInCache(req.currentUser!.userId, followerId, false);
 
-    followerQueue.removeFollowerInDbJob({
+    followerQueue.removeFollowerInDBJob({
       userId: req.currentUser!.userId,
       followerId
     });
