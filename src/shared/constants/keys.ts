@@ -12,6 +12,8 @@ export enum QUEUES {
   UPDATE_BLOCKED_USER_IN_DB = 'updateBlockedUserToDB',
   ADD_REACTION_TO_DB = 'addReactionToDB',
   REMOVE_REACTION_FROM_DB = 'removeReactionFromDB',
+  ADD_CHAT_TO_DB = 'addChatToDB',
+  MARK_MESSAGES_AS_READ_IN_DB = 'markMessagesAsReadInDB',
   SEND_NOTIFICATION_COMMENT = 'sendNotificationComment',
   SEND_NOTIFICATION_FOLLOWER = 'sendNotificationFollower',
   SEND_NOTIFICATION_REACTION = 'sendNotificationReaction',

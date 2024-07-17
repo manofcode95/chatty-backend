@@ -7,8 +7,6 @@ import { IFollowerData } from '@follower/interfaces/follower.interface';
 import mongoose from 'mongoose';
 import { socketIOFollowerObject } from '@sockets/follower.socket';
 import { followerQueue } from '@services/queue/follower.queue';
-// import { socketIOFollowerObject } from '@socket/follower';
-// import { followerQueue } from '@services/queue/follower.queue';
 
 export class FollowController {
   public async follow(req: Request, res: Response): Promise<void> {

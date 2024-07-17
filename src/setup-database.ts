@@ -9,7 +9,7 @@ const log = config.createLogger('database');
 export function connectDatabase() {
   return mongoose
     .connect(config.DATABASE_URL!)
-    .then(() => {
+    .then((res) => {
       log.info('Successfully connected to database');
       redisConnection.connect();
     })

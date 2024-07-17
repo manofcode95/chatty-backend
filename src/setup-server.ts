@@ -19,6 +19,8 @@ import { SocketIOFollowerHandler } from '@sockets/follower.socket';
 import { SocketIOUserHandler } from '@sockets/user.socket';
 import { SocketIONotificationHandler } from '@sockets/notification.socket';
 import { SocketIOImageHandler } from '@sockets/image.socket';
+import { SocketIOChatHandler } from '@sockets/chat.socket';
+import apiStats from 'swagger-stats';
 
 const log = config.createLogger('server');
 const SERVER_PORT = 5000;
@@ -27,6 +29,7 @@ export class ChattyServer {
   constructor(private app: Application) {}
 
   public start(): void {
+    this.apiMonitoring();
     this.securityMiddleware();
     this.standardMiddleware();
     this.routesMiddleware();
@@ -65,6 +68,11 @@ export class ChattyServer {
   private routesMiddleware(): void {
     this.app.use(currentUserMiddleware.getCurrentUser);
     applicationRoutes(this.app);
+  }
+
+  private apiMonitoring(): void {
+    console.log('config api monitoring', apiStats.getMiddleware);
+    this.app.use(apiStats.getMiddleware({ uriPath: '/api-monitoring' }));
   }
 
   private globalErrorHandler(): void {
@@ -124,9 +132,11 @@ export class ChattyServer {
     const socketIOPostHandler = new SocketIOPostHandler(io);
     const socketIOFollowerHandler = new SocketIOFollowerHandler(io);
     const socketIOUserHandler = new SocketIOUserHandler(io);
+    const socketIOChatHandler = new SocketIOChatHandler(io);
 
     socketIOPostHandler.listen();
     socketIOFollowerHandler.listen();
     socketIOUserHandler.listen();
+    socketIOChatHandler.listen();
   }
 }

@@ -19,6 +19,7 @@
     "allowSyntheticDefaultImports": true,
     "pretty": true,
     "resolveJsonModule": true,
+    "skipLibCheck": true,
     "plugins": [
       // Transform paths in output .js files
       { "transform": "typescript-transform-paths" },
@@ -35,6 +36,7 @@
       "@notification/*": ["src/features/notification/*"],
       "@follower/*": ["src/features/follower/*"],
       "@image/*": ["src/features/image/*"],
+      "@chat/*": ["src/features/chat/*"],
       "@mocks/*": ["src/mocks/*"],
       "@globals/*": ["src/shared/globals/*"],
       "@services/*": ["src/shared/services/*"],
@@ -42,5 +44,6 @@
       "@workers/*": ["src/shared/workers/*"],
       "@root/*": ["src/*"]
     }
-  }
+  },
+  "exclude": ["node_modules", "**/*.test.ts"]
 }

@@ -1,23 +1,20 @@
 import { Request, Response } from 'express';
 import HTTP_STATUS from 'http-status-codes';
-import { UserCache } from '@service/redis/user.cache';
-import { joiValidation } from '@global/decorators/joi-validation.decorators';
-import { addImageSchema } from '@image/schemes/images';
-import { uploads } from '@global/helpers/cloudinary-upload';
 import { UploadApiResponse } from 'cloudinary';
-import { BadRequestError } from '@global/helpers/error-handler';
 import { IUserDocument } from '@user/interfaces/user.interface';
-import { socketIOImageObject } from '@socket/image';
-import { imageQueue } from '@service/queues/image.queue';
 import { IBgUploadResponse } from '@image/interfaces/image.interface';
-import { Helpers } from '@global/helpers/helpers';
-
-const userCache: UserCache = new UserCache();
-
-export class Add {
+import { joiValidation } from '@globals/decorators/joi-validation.decorator';
+import { addImageSchema } from '@image/schemes/image.scheme';
+import { upload } from '@globals/helpers/image-handler';
+import { BadRequestError } from '@globals/helpers/error-handler';
+import { userCache } from '@services/redis/user.cache';
+import { socketIOImageObject } from '@sockets/image.socket';
+import { imageQueue } from '@services/queue/image.queue';
+import { isDataURL } from '@globals/helpers/utils';
+class AddImageController {
   @joiValidation(addImageSchema)
   public async profileImage(req: Request, res: Response): Promise<void> {
-    const result: UploadApiResponse = (await uploads(req.body.image, req.currentUser!.userId, true, true)) as UploadApiResponse;
+    const result: UploadApiResponse = (await upload(req.body.image, req.currentUser!.userId, true, true)) as UploadApiResponse;
     if (!result?.public_id) {
       throw new BadRequestError('File upload: Error occurred. Try again.');
     }
@@ -39,7 +36,7 @@ export class Add {
 
   @joiValidation(addImageSchema)
   public async backgroundImage(req: Request, res: Response): Promise<void> {
-    const { version, publicId }: IBgUploadResponse = await Add.prototype.backgroundUpload(req.body.image);
+    const { version, publicId }: IBgUploadResponse = await this.backgroundUpload(req.body.image);
     const bgImageId: Promise<IUserDocument> = userCache.updateSingleUserItemInCache(
       `${req.currentUser!.userId}`,
       'bgImageId',
@@ -65,11 +62,11 @@ export class Add {
   }
 
   private async backgroundUpload(image: string): Promise<IBgUploadResponse> {
-    const isDataURL = Helpers.isDataURL(image);
+    const isValidDataURL = isDataURL(image);
     let version = '';
     let publicId = '';
-    if (isDataURL) {
-      const result: UploadApiResponse = (await uploads(image)) as UploadApiResponse;
+    if (isValidDataURL) {
+      const result: UploadApiResponse = (await upload(image)) as UploadApiResponse;
       if (!result.public_id) {
         throw new BadRequestError(result.message);
       } else {
@@ -84,3 +81,5 @@ export class Add {
     return { version: version.replace(/v/g, ''), publicId };
   }
 }
+
+export const addImageController = new AddImageController();

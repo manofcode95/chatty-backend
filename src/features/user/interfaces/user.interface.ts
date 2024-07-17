@@ -68,6 +68,7 @@ export interface IUserSocketData {
 
 export interface ILogin {
   userId: string;
+  username: string;
 }
 
 export interface IUserJobInfo {

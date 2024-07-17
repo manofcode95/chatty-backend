@@ -1,15 +1,13 @@
 import { Request, Response } from 'express';
 import HTTP_STATUS from 'http-status-codes';
-import { UserCache } from '@service/redis/user.cache';
 import { IUserDocument } from '@user/interfaces/user.interface';
-import { socketIOImageObject } from '@socket/image';
-import { imageQueue } from '@service/queues/image.queue';
 import { IFileImageDocument } from '@image/interfaces/image.interface';
-import { imageService } from '@service/db/image.service';
+import { socketIOImageObject } from '@sockets/image.socket';
+import { imageQueue } from '@services/queue/image.queue';
+import { imageService } from '@services/db/image.service';
+import { userCache } from '@services/redis/user.cache';
 
-const userCache: UserCache = new UserCache();
-
-export class Delete {
+class DeleteImageController {
   public async image(req: Request, res: Response): Promise<void> {
     const { imageId } = req.params;
     socketIOImageObject.emit('delete image', imageId);
@@ -39,3 +37,5 @@ export class Delete {
     res.status(HTTP_STATUS.OK).json({ message: 'Image deleted successfully' });
   }
 }
+
+export const deleteImageController = new DeleteImageController();

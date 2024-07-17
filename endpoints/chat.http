@@ -1,0 +1,27 @@
+@baseUrl = http://localhost:5000
+@urlPath = api/v1
+
+###
+POST {{baseUrl}}/{{urlPath}}/chat/message
+Content-Type: application/json
+Accept: application/json
+withCredentials: true
+
+{
+  "receiverId": "66673bf1c87b45f6481553a8",
+  "body": "haha",
+  "gifUrl": "",
+  "selectedImage": ""
+}
+
+###
+GET {{baseUrl}}/{{urlPath}}/chat/conversation-list
+Content-Type: application/json
+Accept: application/json
+withCredentials: true
+
+###
+GET {{baseUrl}}/{{urlPath}}/chat/messages/667c4a46a130894908e99d09
+Content-Type: application/json
+Accept: application/json
+withCredentials: true
